@@ -20,5 +20,4 @@ xlabel('Frequency (Hz)')
 ylabel('Magnitude')
 xlim([0 100])
 
-
 cd(origPath)
