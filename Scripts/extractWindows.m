@@ -39,16 +39,19 @@ while ~(isFileRead)
             % 1) take last 4 characters and check if they are ".mat"
             % 2) use some kind of string parsing on the "." delimiter and
             % check if the end is a .mat
-            currName = listing(i).name;
             
-            % disp(currName)
-            isFileRead = 1;
-            break;
+            currName = listing(i).name;
+            [~,~,ext] = fileparts(currName);
+            
+            if strcmp(ext,'.mat') % only load if file is a .mat file
+                load(currName)
+                fprintf('Loaded %s\n',currName)
+            end            
         end
     end
+    isFileRead = true;
 end
 
-load(currName)
 
 %% Extracting the Signal Windows
 % reads in an .xlsx file and 
