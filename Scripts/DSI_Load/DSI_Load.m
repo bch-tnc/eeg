@@ -1,5 +1,7 @@
 clear
 
+origPath = pwd;
+
 %checks and closes waitbar from previous instance if there was a crash during loading
 if ishandle('w') == 1
   close(w)
@@ -17,7 +19,6 @@ loadAll=0;
 %Load Trace Selection GUI.  Both the DSILoadDlg.m and DSILoadDlg.fig must
 %be in the path in order for the GUI to load
 DSILoadDlg
-
 
 
 
@@ -628,4 +629,6 @@ end
 
 cd('..')
 %clear unused variables
- clear filefilter filelist savestring nFiles ii j currentdir filename *filelist activity_select eeg_select freq_select sig_select temp_select loadAll listcount w mou testEEGChan  
+clear filefilter filelist savestring nFiles ii j currentdir filename *filelist activity_select eeg_select freq_select sig_select temp_select loadAll listcount w mou testEEGChan  
+
+cd(origPath); % return to original folder where DSI_Load.m is located
