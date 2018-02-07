@@ -1,14 +1,17 @@
-% extract windows of EEG data
+%% Extract Windows of EEG data
+% Kenny Yau
 
 % assumes that the necessary data files have already been stitched with
 % DSI_Load.m
 
+%% Metadata Collextion
 origPath = pwd;
-
 scriptName = mfilename; % gets name of the script
 
+%% Cycle Through .mat Files
 % get directory name of the folder containing our stitched .mat data files
 % pathname = uigetdir;
+% for now, assume it's the below directory
 pathname = 'C:\Users\CH200595\Documents\MATLAB\eeg\Data';
 % disp(pathname)
 cd(pathname)
@@ -52,6 +55,7 @@ while ~(isFileRead)
     isFileRead = true;
 end
 
+cd(origPath)
 
 %% Extracting the Signal Windows
 % reads in an .xlsx file that contains the desired windows for each mouse
@@ -66,6 +70,21 @@ end
 % So far, all requirements are stored during the recording process, and the
 % .mat files outputted from DSI_Load contains this information.
 
+% Format of Data:
+% Mouse ID: XXXX
+%     Time: Any time format that Excel knows (suggestion - HH:MM:SS (24hr))
+%   Length: In minutes
+%     Date: Any date format that Excel knows
+
+filename = 'WOI.xlsx';
+WOI = xlsread(filename);
+
+cd(pathname)
+
+% get list of needed mouse IDs
+mice = WOI(:,1);
+mouseID = unique(mice);
 
 
+%% Return to Sender
 cd(origPath)
