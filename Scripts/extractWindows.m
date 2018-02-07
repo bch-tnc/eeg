@@ -54,17 +54,6 @@ listing = dir('*.mat'); % returns a struct containing info about all .mat files
 dim = size(listing);
 numItems = dim(1);
 
-% % cycle through items in the path
-% for i = 3:numItems % starts on 3 because 1 & 2 are current and previous directory
-%     if ~listing(i).isdir % if not a directory (i.e. it's a file)
-%                          % in the future, also check if the file is a .mat
-%                          % file AND if the data file has the correct
-%                          % nomenclature
-%         currName = listing(i).name;
-%         disp(currName)
-%     end
-% end
-
 % read in .mat file, perform operations
 for i = 1:numMice % step through all entries of mouseID
     currMouse = mouseID(i);
@@ -78,6 +67,7 @@ for i = 1:numMice % step through all entries of mouseID
             break % stop cycling through the filenames once we've found the file
         end
     end
+    
     % do window extraction here
     % Excel stores times as normalized fractions of the day
     % ex. 12:00pm is stored as 0.5
@@ -100,12 +90,7 @@ for i = 1:numMice % step through all entries of mouseID
     % plot, but also save the variables to a .mat file
     % what to save??!!
     % - the window of data, sampling rate, startDate, new startTime
-    % figure out how to save new startDate later
-%     figure
-%     plot(trace(:,1),trace(:,2))
-%     hold on
-%     plot(trace(sampleStart:sampleEnd,1),trace(sampleStart:sampleEnd,2))
-%     hold off
+    % - figure out how to save new startDate later
     trace_window = trace(sampleStart:sampleEnd,2);
     savefile = sprintf('%d_Traces_W%d.mat',currMouse,1);
     save(savefile,'trace_window','Fs','startDate')
