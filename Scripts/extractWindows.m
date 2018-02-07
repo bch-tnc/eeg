@@ -54,7 +54,17 @@ end
 
 
 %% Extracting the Signal Windows
-% reads in an .xlsx file and 
+% reads in an .xlsx file that contains the desired windows for each mouse
+% data
+% Spreadsheet format will be Column A contains ID of mouse, Column B
+% contains start time of the desired window, and Column C contains length
+% of the window. This requires certain information to be already present;
+% i.e. sampling rate of data and start time of the recording.
+% For recordings that last longer than 1 day, may also need user to record
+% the start date of the specified window. Calculating the window time will
+% then also require the start date of the recording.
+% So far, all requirements are stored during the recording process, and the
+% .mat files outputted from DSI_Load contains this information.
 
 
 
