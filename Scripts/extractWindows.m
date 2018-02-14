@@ -94,6 +94,7 @@ for i = 1:numMice % step through all entries of mouseID
     trace_window = trace(sampleStart:sampleEnd,2);
     savefile = sprintf('%d_Traces_W%d.mat',currMouse,1);
     save(savefile,'trace_window','Fs','startDate')
+    fprintf('Saved to %s\n',savefile);
 end
 
 %% Return to Sender
