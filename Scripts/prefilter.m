@@ -4,8 +4,8 @@
 % Would I need antialiasing filter???
 
 origPath = pwd;
-pathname = 'C:\Users\CH200595\Documents\MATLAB\eeg\Data';
-cd(pathname)
+cd ..
+cd Data
 
 load('1002_Traces_Full.mat')
 
@@ -19,5 +19,18 @@ title('FFT (Absolute Value)')
 xlabel('Frequency (Hz)')
 ylabel('Magnitude')
 xlim([0 100])
+
+f0 = 60;
+w0 = f0*2*pi/Fs;
+
+% Notch filter @ 60Hz. Currently, the notch does not have a sharp cutoff
+[b,a] = fir1(52,([59.5 60.5]/(Fs/2)),'stop');
+freqz(b)
+% Notch filter w/ iirnotch. This one is pretty good
+[num,den] = iirnotch(w0,w0/35)
+freqz(num,den)
+
+
+
 
 cd(origPath)
