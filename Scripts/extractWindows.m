@@ -2,7 +2,8 @@
 % Kenny Yau
 
 % assumes that the necessary data files have already been stitched with
-% DSI_Load.m
+% DSI_Load.m and that the files have already been prefiltered (60Hz notch,
+% 0.5-100Hz bandpass)
 
 %% Metadata Collection
 origPath = pwd;
