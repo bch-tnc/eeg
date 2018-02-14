@@ -60,7 +60,7 @@ for i = 1:numMice % step through all entries of mouseID
     for j = 1:numItems % load the corresponding .mat file for the mouse
         currFile = listing(j).name; % get filename
         fileID = strsplit(currFile,'_'); % parse filename for mouseID
-        fileID = str2double(char(fileID(1))); %previously used str2num
+        fileID = str2num(char(fileID(1))); % str2num works for the startTime-> fracTime code below
         if currMouse == fileID
             load(currFile)
             fprintf('Loaded %s\n',currFile)
@@ -75,7 +75,7 @@ for i = 1:numMice % step through all entries of mouseID
     % to do comparisons.
     
     % convert startTime to fractional time
-    time = str2double(char(strsplit(char(startTime.EEG),':'))); % num format
+    time = str2num(char(strsplit(char(startTime.EEG),':'))); % num format
     hrs = time(1); min = time(2); sec = time(3);
     fracTime = ((hrs*60 + min)*60 + sec)/86400; % 86400 is number of sec/day
     
