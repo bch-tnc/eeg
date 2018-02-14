@@ -52,18 +52,18 @@ for i = 1:numBands
     lowBound = currBand(1);
     upBound  = currBand(2);
     
-    tempVec = T;
-    tempVec = tempVec(tempVec>=lowBound);
-    tempVec = tempVec(tempVec<upBound);
+    % find index vector corresponding to desired band in FFT
+    tempF = f;
     
-    meanPower = mean(sum(tempVec));
+    % pull out FFT values corresponding to the vector
+    bandFFT = T(find(f>=lowBound & f<upBound));
+    
+    meanPower = mean(sum(bandFFT));
     bandsPower(i) = meanPower;
 end
 
-T2 = T;
-T2 = T2(T2>=bands(1,1));
-T2 = T2(T2<bands(dim(1),dim(2)));
-totalPower = sum(T2);
+Tbands = T(find(f>=bands(1,1) & f<bands(dim(1),dim(2))));
+totalPower = sum(Tbands);
 
 bandsPowerRatio = bandsPower/totalPower;
 
