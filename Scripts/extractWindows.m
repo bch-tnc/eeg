@@ -36,9 +36,9 @@ WOI = xlsread(filename);
 
 % get directory name of the folder containing our stitched .mat data files
 % pathname = uigetdir;
-% for now, assume it's the below directory
-pathname = 'C:\Users\CH200595\Documents\MATLAB\eeg\Data';
-cd(pathname)
+% for now, assume it's in the eeg/Data directory
+cd ..
+cd Data
 
 % get list of needed mouse IDs
 mice = WOI(:,1);
