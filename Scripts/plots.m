@@ -22,12 +22,15 @@ xlabel('Frequency (Hz)')
 ylabel('dB')
 xlim([0 Fs/2])
 
-% Spectrum Analyzer
-SpecAnalyze = dsp.SpectrumAnalyzer('SampleRate',Fs,'PlotAsTwoSidedSpectrum',false);
-SpecAnalyze(trace_window)
+% % Spectrum Analyzer
+% SpecAnalyze = dsp.SpectrumAnalyzer('SampleRate',Fs,'PlotAsTwoSidedSpectrum',false);
+% SpecAnalyze(trace_window)
 
 % Spectrogram
-% hannwin = hann(64);
+M = 64;
+hannwin = hann(M);
+overlapPercent = 50;
+L = M*(overlapPercent/100);
 figure(3)
-spectrogram(trace_window) % ,hannwin,64,'yaxis',N)
+spectrogram(trace_window,hannwin,L,N,'yaxis')
 title('Spectrogram')
