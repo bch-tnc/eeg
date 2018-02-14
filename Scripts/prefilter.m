@@ -43,8 +43,8 @@ N = 2.^nextpow2(length(trace_window));
 
 Fs = 1000;                                                  % Sampling Frequency (Hz)
 Fn = Fs/2;                                                  % Nyquist Frequency (Hz)
-Wp = [1.0   20]/Fn;                                         % Passband Frequency (Normalised)
-Ws = [0.5   21]/Fn;                                         % Stopband Frequency (Normalised)
+Wp = [0.5   100]/Fn;                                         % Passband Frequency (Normalised)
+Ws = [0.2   110]/Fn;                                         % Stopband Frequency (Normalised)
 Rp =   1;                                                   % Passband Ripple (dB)
 Rs = 150;                                                   % Stopband Ripple (dB)
 [n,Ws] = cheb2ord(Wp,Ws,Rp,Rs);                             % Filter Order
