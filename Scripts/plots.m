@@ -3,21 +3,24 @@
 % typical neuroscientist
 
 % Plots include: (will be populated as I implement them)
+%   - FFT
+%   - Spectrogram
+%   - Power of Oscillation Bands 
 
 % Assumes that the correct trace windows has already been loaded into the
 % workspace.
 
 %% FFT
-% figure(1)
-% N = 2.^nextpow2(length(trace_window));
-% freqz(trace_window,N)
-% title('FFT using freqz')
+figure(1)
+N = 2.^nextpow2(length(trace_window));
+freqz(trace_window,N)
+title('FFT of the Trace Window Using freqz')
 
 figure(2)
 f = (-N/2:N/2-1)*(Fs/N);
 T = abs(fftshift(fft(trace_window,N)));
 plot(f(N/2:end),T(N/2:end))
-title('FFT graph')
+title('FFT of the Trace Window Using fft')
 xlabel('Frequency (Hz)')
 ylabel('Magnitude')
 xlim([0 Fs/2])
@@ -45,8 +48,10 @@ bands = [0.5  4     % delta
 
 dim = size(bands);
 numBands = dim(1);
-bandsPower = zeros(1,numBands);
+bandPowers = zeros(1,numBands);
+totalPower = 0;
 
+figure(4)
 for i = 1:numBands
     currBand = bands(i,:);
     lowBound = currBand(1);
@@ -57,17 +62,30 @@ for i = 1:numBands
     
     % pull out FFT values corresponding to the vector
     bandFFT = T(find(f>=lowBound & f<upBound));
+    fFFT    = f(find(f>=lowBound & f<upBound));
     
-    meanPower = mean(sum(bandFFT));
-    bandsPower(i) = meanPower;
+    % plot the different bands
+    plot(fFFT,bandFFT)
+    hold on
+    
+    meanPower = mean(bandFFT);
+    bandSum = sum(bandFFT);
+    meanPowers(i) = meanPower;
+    bandPowers(i) = bandSum; 
+    totalPower = totalPower + bandSum;
 end
 
+% metadata for the FFT graph (corresponding to Figure 4)
+title('FFT of the EEG Recording')
+legend('Delta','Theta','Alpha','Beta','Gamma')
+
+% works just as well as the summing method in the for-loop
 Tbands = T(find(f>=bands(1,1) & f<bands(dim(1),dim(2))));
 totalPower = sum(Tbands);
 
-bandsPowerRatio = bandsPower/totalPower;
+bandsPowerRatio = meanPowers/(totalPower/length(Tbands));
 
-figure
+figure(5)
 stem(bandsPowerRatio)
 title('Power Ratio of Various Oscillation Bands')
     
