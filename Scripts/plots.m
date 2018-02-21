@@ -55,6 +55,7 @@ bandNames = {'Delta','Theta','Alpha','Beta','Gamma'};
 dim = size(bands);
 numBands = dim(1);
 bandPowers = zeros(1,numBands);
+meanPowers = zeros(1,numBands);
 totalPower = 0;
 
 figure(4)
@@ -112,7 +113,7 @@ for i = 1:numBands
 end
 hold off
 title('Power Ratio of Various Oscillation Bands')
-set(gca,'xtick',[1:5],'xticklabel',bandNames) % labels each stem w/ text
+set(gca,'xtick',1:numBands,'xticklabel',bandNames) % labels each stem w/ text
 xlabel('Band')
 ylabel('Power')
 legend(bandNames)
