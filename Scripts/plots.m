@@ -50,7 +50,8 @@ bands = [0.5  4     % delta
          8   13     % alpha
         13   30     % beta
         30   80];   % gamma
-
+bandNames = {'Delta','Theta','Alpha','Beta','Gamma'};
+    
 dim = size(bands);
 numBands = dim(1);
 bandPowers = zeros(1,numBands);
@@ -84,9 +85,11 @@ end
 % metadata for the FFT graph (corresponding to Figure 4)
 hold off
 title('FFT of the EEG Recording')
+xlabel('Frequency (Hz)')
+ylabel('Magnitude')
 xstart = 0; xend = bands(dim(1),dim(2)); % 0 so user knows delta band starts at 0.5Hz
 xlim([xstart, xend])
-legend('Delta','Theta','Alpha','Beta','Gamma')
+legend(bandNames)
 
 % works just as well as the summing method in the for-loop
 % this is left here to find the average of the total power
@@ -94,8 +97,12 @@ FFTbands = FFT(find(f>=bands(1,1) & f<bands(dim(1),dim(2))));
 totalPower = sum(FFTbands);
 totalPowerAvg = totalPower/length(FFTbands);
 
-% power ratios
+% power ratios. normalizes numbers to sum to 100
+% according to sameer, not really needed so that line is commented out for
+% now
 bandsPowerRatio = meanPowers/totalPowerAvg;
+% normFactor = sum(bandsPowerRatio)/100;
+% bandsPowerRatio = bandsPowerRatio/normFactor;
 
 % for-loop to color-code each band
 figure(5)
@@ -105,7 +112,10 @@ for i = 1:numBands
 end
 hold off
 title('Power Ratio of Various Oscillation Bands')
-legend('Delta','Theta','Alpha','Beta','Gamma')
+set(gca,'xtick',[1:5],'xticklabel',bandNames) % labels each stem w/ text
+xlabel('Band')
+ylabel('Power')
+legend(bandNames)
 xlim([0 numBands+1])
 
     
