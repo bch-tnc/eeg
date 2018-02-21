@@ -3,8 +3,9 @@
 % typical neuroscientist
 
 % Plots include: (will be populated as I implement them)
-%   - FFT
+%   - FFT (freqz and fft)
 %   - Spectrogram
+%   - FFT graph color-coded by band
 %   - Power of Oscillation Bands 
 
 % Assumes that the correct trace windows has already been loaded into the
@@ -18,8 +19,8 @@ title('FFT of the Trace Window Using freqz')
 
 figure(2)
 f = (-N/2:N/2-1)*(Fs/N);
-T = abs(fftshift(fft(trace_window,N)));
-plot(f(N/2:end),T(N/2:end))
+FFT = abs(fftshift(fft(trace_window,N)));
+plot(f(N/2:end),FFT(N/2:end))
 title('FFT of the Trace Window Using fft')
 xlabel('Frequency (Hz)')
 ylabel('Magnitude')
@@ -61,13 +62,14 @@ for i = 1:numBands
     tempF = f;
     
     % pull out FFT values corresponding to the vector
-    bandFFT = T(find(f>=lowBound & f<upBound));
-    fFFT    = f(find(f>=lowBound & f<upBound));
+    bandFFT = FFT(find(f>=lowBound & f<upBound));
+       fFFT = f(find(f>=lowBound & f<upBound));
     
     % plot the different bands
     plot(fFFT,bandFFT)
     hold on
     
+    % calculates absolute band powers and mean powers
     meanPower = mean(bandFFT);
     bandSum = sum(bandFFT);
     meanPowers(i) = meanPower;
@@ -76,17 +78,30 @@ for i = 1:numBands
 end
 
 % metadata for the FFT graph (corresponding to Figure 4)
+hold off
 title('FFT of the EEG Recording')
+xstart = 0; xend = bands(dim(1),dim(2)); % 0 so user knows delta band starts at 0.5Hz
+xlim([xstart, xend])
 legend('Delta','Theta','Alpha','Beta','Gamma')
 
 % works just as well as the summing method in the for-loop
-Tbands = T(find(f>=bands(1,1) & f<bands(dim(1),dim(2))));
-totalPower = sum(Tbands);
+% this is left here to find the average of the total power
+FFTbands = FFT(find(f>=bands(1,1) & f<bands(dim(1),dim(2))));
+totalPower = sum(FFTbands);
+totalPowerAvg = totalPower/length(FFTbands);
 
-bandsPowerRatio = meanPowers/(totalPower/length(Tbands));
+% power ratios
+bandsPowerRatio = meanPowers/totalPowerAvg;
 
+% for-loop to color-code each band
 figure(5)
-stem(bandsPowerRatio)
+for i = 1:numBands
+    stem(i,bandsPowerRatio(i))
+    hold on
+end
+hold off
 title('Power Ratio of Various Oscillation Bands')
-    
+legend('Delta','Theta','Alpha','Beta','Gamma')
+xlim([0 numBands+1])
+
     
