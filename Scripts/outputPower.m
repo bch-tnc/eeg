@@ -1,0 +1,1 @@
+% Writes Power Band Values to an Excel Spreadsheet
