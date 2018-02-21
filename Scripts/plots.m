@@ -11,6 +11,10 @@
 % Assumes that the correct trace windows has already been loaded into the
 % workspace.
 
+% Recommended that all figures are closed prior to running the script so
+% that the color-coding matches with the legend (run 'close all' in the
+% command window to close all figures)
+
 %% FFT
 figure(1)
 N = 2.^nextpow2(length(trace_window));
