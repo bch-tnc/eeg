@@ -33,6 +33,7 @@ scriptName = mfilename; % gets name of the script
 
 filename = 'WOI.xlsx'; % insert spreadsheet name here
 WOI = xlsread(filename);
+numEntries = size(WOI,1);
 
 % get directory name of the folder containing our stitched .mat data files
 % pathname = uigetdir;
@@ -51,6 +52,11 @@ numMice = length(mouseID);
 
 %% Cycle Through .mat Files
 
+% constants
+SEC_PER_DAY = 86400;
+SEC_PER_MIN = 60;
+MIN_PER_HOUR = 60;
+
 % later, make extractWindows work for multiple experiments
 % for now, the folder w/ all the necessary .mat files are in 1 folder
 listing = dir;
@@ -58,19 +64,16 @@ currExp = listing(10).name;
 
 cd(currExp)
 
-varFiles = dir('*.mat');
-listing = dir('*.mat'); % returns a struct containing info about all .mat files in the current folder
-
-dim = size(listing);
-numItems = dim(1);
+varFiles = dir('*Full*.mat'); % gets info about all .mat files with full EEG recordings in the current folder
+numVarFiles = size(varFiles,1);
 
 isData2Save = false;
 
 % read in .mat file, perform operations
 for i = 1:numMice % step through all entries of mouseID
     currMouse = mouseID(i);
-    for j = 1:numItems % load the corresponding .mat file for the mouse
-        currFile = listing(j).name; % get filename
+    for j = 1:numVarFiles % load the corresponding .mat file for the mouse
+        currFile = varFiles(j).name; % get filename
         fileID = strsplit(currFile,'_'); % parse filename for mouseID
         fileID = str2num(char(fileID(1))); % str2num works for the startTime-> fracTime code below
         if currMouse == fileID
@@ -91,23 +94,34 @@ for i = 1:numMice % step through all entries of mouseID
         time = str2num(char(strsplit(char(startTime.EEG),':'))); % num format
         hrs = time(1); min = time(2); sec = time(3);
         fracTime = ((hrs*60 + min)*60 + sec)/86400; % 86400 is number of sec/day
+        
+        % loop through all WOI entries for a given mouseID
+        % assumes entries for same mouseID are next to each other
+        currEntry = ia(i); % ex. mouseID 121 starts on row 5
+        currEntryName = WOI(currEntry,1);
+        offset = ia(i)-1;
+        
+        while (currEntryName == currMouse && currEntry <= numEntries)
+            % calculate window indices
+            excelTime = WOI(currEntry,2); % col 2 contains the start time
+            timeDiff = excelTime - fracTime;
 
-        % calculate window indices
-        excelTime = WOI(ia(i),2);
-        timeDiff = excelTime - fracTime;
+            sampleStart = round(timeDiff*86400*Fs);
+            windowSize = WOI(currEntry,3)*60*Fs; % col 3 contains the length
+            sampleEnd = sampleStart + windowSize;
 
-        sampleStart = round(timeDiff*86400*Fs);
-        windowSize = WOI(ia(i),3)*60*Fs;
-        sampleEnd = sampleStart + windowSize;
-
-        % plot, but also save the variables to a .mat file
-        % what to save??!!
-        % - the window of data, sampling rate, startDate, new startTime
-        % - figure out how to save new startDate later
-        trace_window = trace(sampleStart:sampleEnd,2);
-        savefile = sprintf('%d_Traces_W%d.mat',currMouse,1);
-        save(savefile,'trace_window','Fs','startDate')
-        fprintf('Saved to %s\n',savefile);
+            % plot, but also save the variables to a .mat file
+            % what to save??!!
+            % - the window of data, sampling rate, startDate, new startTime
+            % - figure out how to save new startDate later
+            trace_window = trace(sampleStart:sampleEnd,2);
+            windowNum = currEntry - offset;
+            savefile = sprintf('%d_Traces_W%d.mat',currMouse,windowNum);
+            save(savefile,'trace_window','Fs','startDate')
+            fprintf('Saved to %s\n',savefile);
+            
+            currEntry = currEntry + 1;
+        end
     end
     isData2Save = false;
 end
