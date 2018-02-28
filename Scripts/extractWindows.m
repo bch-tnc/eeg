@@ -5,7 +5,7 @@
 % DSI_Load.m
 
 %% Metadata Collection
-origPath = pwd;
+scriptPath = pwd;
 scriptName = mfilename; % gets name of the script
 
 %% Extracting the Signal Windows
@@ -146,4 +146,4 @@ save(savefile,'expData','Fs','startDate')
 fprintf('Saved experiment data to %s\n',savefile)
 
 %% Return to Sender
-cd(origPath)
+cd(scriptPath)
