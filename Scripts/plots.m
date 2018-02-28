@@ -16,10 +16,11 @@
 % command window to close all figures)
 
 %% FFT
-figure(1)
+% figure(1)
 N = 2.^nextpow2(length(trace_window));
-freqz(trace_window,N)
-title('FFT of the Trace Window Using freqz')
+
+% freqz(trace_window,N)
+% title('FFT of the Trace Window Using freqz')
 
 figure(2)
 f = (-N/2:N/2-1)*(Fs/N);
@@ -31,11 +32,12 @@ ylabel('Magnitude')
 xlim([0 Fs/2])
 grid on
 
+%% Spectrogram
+
 % % Spectrum Analyzer
 % SpecAnalyze = dsp.SpectrumAnalyzer('SampleRate',Fs,'PlotAsTwoSidedSpectrum',false);
 % SpecAnalyze(trace_window)
 
-%% Spectrogram
 M = 64;
 hannwin = hann(M);
 overlapPercent = 50;
@@ -91,6 +93,7 @@ ylabel('Magnitude')
 xstart = 0; xend = bands(dim(1),dim(2)); % 0 so user knows delta band starts at 0.5Hz
 xlim([xstart, xend])
 legend(bandNames)
+grid on
 
 % works just as well as the summing method in the for-loop
 % this is left here to find the average of the total power
@@ -101,14 +104,14 @@ totalPowerAvg = totalPower/length(FFTbands);
 % power ratios. normalizes numbers to sum to 100
 % according to sameer, not really needed so that line is commented out for
 % now
-bandsPowerRatio = meanPowers/totalPowerAvg;
+bandPowerRatios = meanPowers/totalPowerAvg;
 % normFactor = sum(bandsPowerRatio)/100;
 % bandsPowerRatio = bandsPowerRatio/normFactor;
 
 % for-loop to color-code each band
 figure(5)
 for i = 1:numBands
-    stem(i,bandsPowerRatio(i))
+    stem(i,bandPowerRatios(i))
     hold on
 end
 hold off
