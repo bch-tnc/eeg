@@ -104,7 +104,6 @@ if eeg_select == 1
     %Filter: only select EEG text files, and add them to their own list for loading
     for j=1:nFiles
         if isempty(strfind(filelist(j).name, 'EEG')) == 0 && isempty(strfind(filelist(j).name, '.txt')) == 0
-            
             EEGfilelist{listcount} = filelist(j).name;
             listcount = listcount +1;
         end
