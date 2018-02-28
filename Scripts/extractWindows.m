@@ -121,6 +121,10 @@ for i = 1:numMice % step through all entries of mouseID
             fprintf('Saved to %s\n',savefile);
             
             currEntry = currEntry + 1;
+            
+            if currEntry < numEntries
+                currEntryName = WOI(currEntry,1);
+            end
         end
     end
     isData2Save = false;
