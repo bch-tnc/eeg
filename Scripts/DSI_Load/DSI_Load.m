@@ -616,13 +616,12 @@ currPath=pwd;
 cd('..')
 
 % Saving data, status messages
-if ~isempty(EEGfilelist)
-    fprintf('Saving %s to disk...\n', savestring)
-    % save final output as a matlab binary file for speed
-    save(savestring, 'trace', 'trace_temp', 'trace_activity', 'trace_signalstr', 'trace_freqPulse', 'n','mouse',...
-        'Fs', 'Fs_temp', 'Fs_sig', 'Fs_activity','startTime','startDate', '-v7')
-    fprintf('done!\n')
-end
+fprintf('Saving %s to disk...\n', savestring)
+% save final output as a matlab binary file for speed
+save(savestring, 'trace', 'trace_temp', 'trace_activity', 'trace_signalstr', 'trace_freqPulse', 'n','mouse',...
+    'Fs', 'Fs_temp', 'Fs_sig', 'Fs_activity','startTime','startDate', '-v7')
+fprintf('done!\n')
+
 
 %return to original path w/ text files for next mouse
 cd(currPath)
