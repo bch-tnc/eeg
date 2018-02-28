@@ -81,6 +81,7 @@ end
 
 
 for n=1:length(mouse)
+fprintf('Working with %s\n',char(mouse(n)))
 %get all files for appropriate mouse number
 filefilter = strcat(mouse{n}, '.*');
 filelist = dir(filefilter);
@@ -614,14 +615,17 @@ savestring = strcat(mouse{n}, '_Traces_Full.mat');
 currPath=pwd;
 cd('..')
 
-fprintf('Saving %s to disk...\n', savestring)
-% save final output as a matlab binary file for speed
-save(savestring, 'trace', 'trace_temp', 'trace_activity', 'trace_signalstr', 'trace_freqPulse', 'n','mouse',...
-    'Fs', 'Fs_temp', 'Fs_sig', 'Fs_activity','startTime','startDate', '-v7')
+% Saving data, status messages
+if ~isempty(EEGfilelist)
+    fprintf('Saving %s to disk...\n', savestring)
+    % save final output as a matlab binary file for speed
+    save(savestring, 'trace', 'trace_temp', 'trace_activity', 'trace_signalstr', 'trace_freqPulse', 'n','mouse',...
+        'Fs', 'Fs_temp', 'Fs_sig', 'Fs_activity','startTime','startDate', '-v7')
+    fprintf('done!\n')
+end
 
 %return to original path w/ text files for next mouse
 cd(currPath)
-fprintf('done!\n')
 
 end
 
