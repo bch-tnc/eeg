@@ -37,6 +37,7 @@ WOI = xlsread(filename);
 % get directory name of the folder containing our stitched .mat data files
 % pathname = uigetdir;
 % for now, assume it's in the eeg/Data directory
+% also assume this script is in the eeg/Scripts Folder
 cd ..
 cd Data
 
@@ -49,10 +50,21 @@ mice = WOI(:,1);
 numMice = length(mouseID);
 
 %% Cycle Through .mat Files
-listing = dir('*.mat'); % returns a struct containing info about all .mat files
+
+% later, make extractWindows work for multiple experiments
+% for now, the folder w/ all the necessary .mat files are in 1 folder
+listing = dir;
+currExp = listing(10).name;
+
+cd(currExp)
+
+varFiles = dir('*.mat');
+listing = dir('*.mat'); % returns a struct containing info about all .mat files in the current folder
 
 dim = size(listing);
 numItems = dim(1);
+
+isData2Save = false;
 
 % read in .mat file, perform operations
 for i = 1:numMice % step through all entries of mouseID
@@ -64,6 +76,7 @@ for i = 1:numMice % step through all entries of mouseID
         if currMouse == fileID
             load(currFile)
             fprintf('Loaded %s\n',currFile)
+            isData2Save = true;
             break % stop cycling through the filenames once we've found the file
         end
     end
@@ -73,28 +86,30 @@ for i = 1:numMice % step through all entries of mouseID
     % ex. 12:00pm is stored as 0.5
     % We convert startTime to this normalized fraction units first in order
     % to do comparisons.
-    
-    % convert startTime to fractional time
-    time = str2num(char(strsplit(char(startTime.EEG),':'))); % num format
-    hrs = time(1); min = time(2); sec = time(3);
-    fracTime = ((hrs*60 + min)*60 + sec)/86400; % 86400 is number of sec/day
-    
-    % calculate window indices
-    excelTime = WOI(numMice,2);
-    timeDiff = excelTime - fracTime;
+    if isData2Save
+        % convert startTime to fractional time
+        time = str2num(char(strsplit(char(startTime.EEG),':'))); % num format
+        hrs = time(1); min = time(2); sec = time(3);
+        fracTime = ((hrs*60 + min)*60 + sec)/86400; % 86400 is number of sec/day
 
-    sampleStart = round(timeDiff*86400*Fs);
-    windowSize = WOI(numMice,3)*60*Fs;
-    sampleEnd = sampleStart + windowSize;
+        % calculate window indices
+        excelTime = WOI(ia(i),2);
+        timeDiff = excelTime - fracTime;
 
-    % plot, but also save the variables to a .mat file
-    % what to save??!!
-    % - the window of data, sampling rate, startDate, new startTime
-    % - figure out how to save new startDate later
-    trace_window = trace(sampleStart:sampleEnd,2);
-    savefile = sprintf('%d_Traces_W%d.mat',currMouse,1);
-    save(savefile,'trace_window','Fs','startDate')
-    fprintf('Saved to %s\n',savefile);
+        sampleStart = round(timeDiff*86400*Fs);
+        windowSize = WOI(ia(i),3)*60*Fs;
+        sampleEnd = sampleStart + windowSize;
+
+        % plot, but also save the variables to a .mat file
+        % what to save??!!
+        % - the window of data, sampling rate, startDate, new startTime
+        % - figure out how to save new startDate later
+        trace_window = trace(sampleStart:sampleEnd,2);
+        savefile = sprintf('%d_Traces_W%d.mat',currMouse,1);
+        save(savefile,'trace_window','Fs','startDate')
+        fprintf('Saved to %s\n',savefile);
+    end
+    isData2Save = false;
 end
 
 %% Return to Sender
