@@ -38,13 +38,14 @@ grid on
 % SpecAnalyze = dsp.SpectrumAnalyzer('SampleRate',Fs,'PlotAsTwoSidedSpectrum',false);
 % SpecAnalyze(trace_window)
 
-M = 64;
-hannwin = hann(M);
-overlapPercent = 50;
-L = M*(overlapPercent/100);
-figure(3)
-spectrogram(trace_window,hannwin,L,N,Fs,'yaxis')
-title('Spectrogram')
+% %% Spectrogram
+% M = 64;
+% hannwin = hann(M);
+% overlapPercent = 50;
+% L = M*(overlapPercent/100);
+% figure(3)
+% spectrogram(trace_window,hannwin,L,N,Fs,'yaxis')
+% title('Spectrogram')
 
 %% Power Bands Plot
 bands = [0.5  4     % delta
