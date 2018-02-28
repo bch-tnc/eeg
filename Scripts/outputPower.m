@@ -13,15 +13,63 @@ currExp = listing(10).name;
 
 cd(currExp)
 
+currExpPath = pwd;
+
 filename = 'powerData.csv';
 header = {'Window','Delta','Theta','Alpha','Beta','Gamma'};
 
 numWin = size(expData,2);
 
 for i = 1:numWin
-    fprintf('%d\n',expData(i).mouse)
-    fprintf('%d\n',expData(i).winNum)
-    plot(expData(i).trace)
+    currMouse = expData(i).mouse;
+    currWin   = expData(i).winNum;
+    fprintf('Calculating Mouse %d Window %d\n',currMouse,currWin)
+    currTrace = expData(i).trace;
+
+    N = 2.^nextpow2(length(currTrace));
+    f = (-N/2:N/2-1)*(Fs/N);
+    FFT = abs(fftshift(fft(currTrace,N)));
+
+
+    cd(scriptPath)
+    [meanPowers,bandPowers] = calcBandPower(FFT,f);
+    cd(currExpPath)
+
+
+
+
+    % works just as well as the summing method in the for-loop
+    % this is left here to find the average of the total power
+    FFTbands = FFT(find(f>=bands(1,1) & f<bands(dim(1),dim(2))));
+    totalPower = sum(FFTbands);
+    totalPowerAvg = totalPower/length(FFTbands);
+
+    % power ratios. normalizes numbers to sum to 100
+    % according to sameer, not really needed so that line is commented out for
+    % now
+    bandPowerRatios = meanPowers/totalPowerAvg;
+    % normFactor = sum(bandsPowerRatio)/100;
+    % bandsPowerRatio = bandsPowerRatio/normFactor;
+
+    % for-loop to color-code each band
+    figure(5)
+    for i = 1:numBands
+        stem(i,bandPowerRatios(i))
+        hold on
+    end
+    hold off
+    title('Power Ratio of Various Oscillation Bands')
+    set(gca,'xtick',1:numBands,'xticklabel',bandNames) % labels each stem w/ text
+    xlabel('Band')
+    ylabel('Power')
+    legend(bandNames)
+    xlim([0 numBands+1])
+
+
+
+
+
+
 end
 
 

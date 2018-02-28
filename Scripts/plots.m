@@ -54,37 +54,40 @@ bands = [0.5  4     % delta
         13   30     % beta
         30   80];   % gamma
 bandNames = {'Delta','Theta','Alpha','Beta','Gamma'};
-    
+     
 dim = size(bands);
 numBands = dim(1);
 bandPowers = zeros(1,numBands);
 meanPowers = zeros(1,numBands);
 totalPower = 0;
+ 
+% figure(4)
+% for i = 1:numBands
+%     currBand = bands(i,:);
+%     lowBound = currBand(1);
+%     upBound  = currBand(2);
+%     
+%     % find index vector corresponding to desired band in FFT
+%     tempF = f;
+%     
+%     % pull out FFT values corresponding to the vector
+%     bandFFT = FFT(find(f>=lowBound & f<upBound));
+%        fFFT = f(find(f>=lowBound & f<upBound));
+%     
+%     % plot the different bands
+%     plot(fFFT,bandFFT)
+%     hold on
+%     
+%     % calculates absolute band powers and mean powers
+%     meanPower = mean(bandFFT);
+%     bandSum = sum(bandFFT);
+%     meanPowers(i) = meanPower;
+%     bandPowers(i) = bandSum; 
+%     totalPower = totalPower + bandSum;
+% end
 
-figure(4)
-for i = 1:numBands
-    currBand = bands(i,:);
-    lowBound = currBand(1);
-    upBound  = currBand(2);
-    
-    % find index vector corresponding to desired band in FFT
-    tempF = f;
-    
-    % pull out FFT values corresponding to the vector
-    bandFFT = FFT(find(f>=lowBound & f<upBound));
-       fFFT = f(find(f>=lowBound & f<upBound));
-    
-    % plot the different bands
-    plot(fFFT,bandFFT)
-    hold on
-    
-    % calculates absolute band powers and mean powers
-    meanPower = mean(bandFFT);
-    bandSum = sum(bandFFT);
-    meanPowers(i) = meanPower;
-    bandPowers(i) = bandSum; 
-    totalPower = totalPower + bandSum;
-end
+[meanPowers,bandPowers] = calcBandPower(FFT,f);
+
 
 % metadata for the FFT graph (corresponding to Figure 4)
 hold off
