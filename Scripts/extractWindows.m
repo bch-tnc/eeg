@@ -17,7 +17,7 @@ scriptName = mfilename; % gets name of the script
 % MouseID  | Start Time | Length (min)
 %
 % Format of Data:
-% Mouse ID: XXXX
+% Mouse ID: a number
 %     Time: Any time format that Excel knows (suggestion - HH:MM:SS (24hr))
 %   Length: In minutes (this resolution is probably good enough)
 %     Date: Any date format that Excel knows
@@ -69,6 +69,10 @@ numVarFiles = size(varFiles,1);
 
 isData2Save = false;
 
+% create a struct
+expData = struct;
+currStructEntry = 1;
+
 % read in .mat file, perform operations
 for i = 1:numMice % step through all entries of mouseID
     currMouse = mouseID(i);
@@ -106,12 +110,11 @@ for i = 1:numMice % step through all entries of mouseID
             excelTime = WOI(currEntry,2); % col 2 contains the start time
             timeDiff = excelTime - fracTime;
 
-            sampleStart = round(timeDiff*86400*Fs);
             windowSize = WOI(currEntry,3)*60*Fs; % col 3 contains the length
+            sampleStart = round(timeDiff*86400*Fs);
             sampleEnd = sampleStart + windowSize;
 
-            % plot, but also save the variables to a .mat file
-            % what to save??!!
+            % saves certain variables to a .mat file
             % - the window of data, sampling rate, startDate, new startTime
             % - figure out how to save new startDate later
             trace_window = trace(sampleStart:sampleEnd,2);
@@ -120,15 +123,27 @@ for i = 1:numMice % step through all entries of mouseID
             save(savefile,'trace_window','Fs','startDate')
             fprintf('Saved to %s\n',savefile);
             
+            % add data to the experimentData struct
+            expData(currStructEntry).mouse = currMouse;
+            expData(currStructEntry).winNum = windowNum;
+            expData(currStructEntry).trace = trace_window;
+
             currEntry = currEntry + 1;
-            
+            currStructEntry = currStructEntry + 1;
+
             if currEntry < numEntries
                 currEntryName = WOI(currEntry,1);
             end
         end
     end
+    
     isData2Save = false;
 end
+
+% save experiment data
+savefile = sprintf('expData.mat');
+save(savefile,'expData','Fs','startDate')
+fprintf('Saved experiment data to %s\n',savefile)
 
 %% Return to Sender
 cd(origPath)
