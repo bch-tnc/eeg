@@ -110,29 +110,27 @@ if eeg_select == 1
         
     end
     
-    %get start time info from header
-    fid = fopen(EEGfilelist{1});
-            paramIds = textscan(fid,'%s %s %s %s',1,'HeaderLines',1);
-            fclose(fid);
-            startDate.EEG = paramIds{3};
-            startTime.EEG = paramIds{4};
-    
-            
-            testEEGChan = importdata(char(EEGfilelist(1)), ',', 5);
-       if iscell(testEEGChan) == 1
-           twochannel = 1;
-       else
-           twochannel = 0;
-       end
-       
-       %clear testEEGchan
-    
     if isempty(EEGfilelist) == 0
+        %get start time info from header
+        fid = fopen(EEGfilelist{1});
+        paramIds = textscan(fid,'%s %s %s %s',1,'HeaderLines',1);
+        fclose(fid);
+        startDate.EEG = paramIds{3};
+        startTime.EEG = paramIds{4};
+            
+        testEEGChan = importdata(char(EEGfilelist(1)), ',', 5);
+        
+        if iscell(testEEGChan) == 1
+            twochannel = 1;
+        else
+            twochannel = 0;
+        end
+        %clear testEEGchan
+        
         %total number of EEG text files
         tot_EEGfiles=length(EEGfilelist);
         
         %variable that holds trace of concatenated EEG traces
-        
         
         %loading bar
         if waitbarOn == 1
@@ -151,7 +149,7 @@ if eeg_select == 1
                 newData = importdata(char(EEGfilelist(ii)), ',', 5);
             end
             
-            if twochannel == 1;
+            if twochannel == 1
                 newData = importdata(char(EEGfilelist(ii)), ',', 6);
             end
             
