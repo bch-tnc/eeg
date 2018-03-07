@@ -103,10 +103,13 @@ for i = 1:numMice % step through all entries of mouseID
         % assumes entries for same mouseID are next to each other
         currEntry = ia(i); % ex. mouseID 121 starts on row 5
         currEntryName = WOI(currEntry,1);
-        offset = ia(i)-1;
-        currGenotype = WOI(currEntry,3);
+        % offset = ia(i)-1;
+        currGenotype = WOI(currEntry,3); % col 3 is genotype
+
         
         while (currEntryName == currMouse && currEntry <= numEntries)
+            currWindow = WOI(currEntry,2); % col 2 is window type
+            
             % calculate window indices
             excelTime = WOI(currEntry,4); % col 4 contains the start time
             timeDiff = excelTime - fracTime;
@@ -119,14 +122,14 @@ for i = 1:numMice % step through all entries of mouseID
             % - the window of data, sampling rate, startDate, new startTime
             % - figure out how to save new startDate later
             trace_window = trace(sampleStart:sampleEnd,2);
-            windowNum = currEntry - offset;
-            savefile = sprintf('%d_Traces_W%d.mat',currMouse,windowNum);
+            % windowNum = currEntry - offset;
+            savefile = sprintf('%d_Traces_W%d.mat',currMouse,currWindow);
             save(savefile,'trace_window','Fs','startDate')
             fprintf('Saved to %s\n',savefile);
             
             % add data to the experimentData struct
             expData(currStructEntry).mouse = currMouse;
-            expData(currStructEntry).winNum = windowNum;
+            expData(currStructEntry).winNum = currWindow;
             expData(currStructEntry).trace = trace_window;
             expData(currStructEntry).genotype = currGenotype;
 
