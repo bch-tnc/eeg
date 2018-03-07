@@ -38,7 +38,7 @@ for k = 1:numWin
     currTrace(isnan(currTrace)) = 0; % make NaN and Inf values 0 so that
     currTrace(isinf(currTrace)) = 0; % you get valid FFT
 
-    % fft
+    % fft, including frequency vector setup
     N = 2.^nextpow2(length(currTrace));
     f = (-N/2:N/2-1)*(Fs/N);
     FFT = abs(fftshift(fft(currTrace,N)));

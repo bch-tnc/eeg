@@ -104,6 +104,7 @@ for i = 1:numMice % step through all entries of mouseID
         currEntry = ia(i); % ex. mouseID 121 starts on row 5
         currEntryName = WOI(currEntry,1);
         offset = ia(i)-1;
+        currGenotype = WOI(currEntry,5);
         
         while (currEntryName == currMouse && currEntry <= numEntries)
             % calculate window indices
@@ -127,6 +128,7 @@ for i = 1:numMice % step through all entries of mouseID
             expData(currStructEntry).mouse = currMouse;
             expData(currStructEntry).winNum = windowNum;
             expData(currStructEntry).trace = trace_window;
+            expData(currStructEntry).genotype = currGenotype;
 
             currEntry = currEntry + 1;
             currStructEntry = currStructEntry + 1;
