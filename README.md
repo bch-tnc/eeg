@@ -26,3 +26,7 @@ Steps to Run this Analyses:
 - run extractWindows.m
 - run plots.m (can skip if don't need )
 - run outputPower.m
+
+After all of this, the result should be a .csv file with the power band values
+
+At this moment, running DSI_Load.m, extractWindows.m, and outputPower.m works pretty smoothly

@@ -31,9 +31,9 @@ for i = 1:numBands
     bandFFT = FFT(find(f>=lowBound & f<upBound));
        fFFT = f(find(f>=lowBound & f<upBound));
     
-    % plot the different bands
-    plot(fFFT,bandFFT)
-    hold on
+%     % plot the different bands
+%     plot(fFFT,bandFFT)
+%     hold on
     
     % calculates absolute band powers and mean powers
     meanPower = mean(bandFFT);

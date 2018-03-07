@@ -111,7 +111,7 @@ for i = 1:numMice % step through all entries of mouseID
             timeDiff = excelTime - fracTime;
 
             windowSize = WOI(currEntry,3)*60*Fs; % col 3 contains the length
-            sampleStart = round(timeDiff*86400*Fs);
+            sampleStart = round(timeDiff*86400*Fs)+1;
             sampleEnd = sampleStart + windowSize;
 
             % saves certain variables to a .mat file
