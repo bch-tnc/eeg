@@ -14,7 +14,7 @@ cd(currExp)
 currExpPath = pwd;
 
 filename = 'powerData.csv';
-header = {'Window','Delta','Theta','Alpha','Beta','Gamma'};
+header = {'Mouse','Window','Genotype','Delta','Theta','Alpha','Beta','Gamma'};
 
 % if listing.name == filename
 fid = fopen(filename,'a');
@@ -31,8 +31,9 @@ fclose('all');
 numWin = size(expData,2);
 
 for k = 1:numWin
-    currMouse = expData(k).mouse;
-    currWin   = expData(k).winNum;
+    currMouse    = expData(k).mouse;
+    currWin      = expData(k).winNum;
+    currGenotype = expData(k).genotype;
     fprintf('Calculating Mouse %d Window %d\n',currMouse,currWin)
     currTrace = expData(k).trace;
     currTrace(isnan(currTrace)) = 0; % make NaN and Inf values 0 so that
@@ -57,11 +58,13 @@ for k = 1:numWin
     bandPowerRatios = meanPowers/totalPowerAvg;
 
     % write label
-    winText = {sprintf('%d-%d',currMouse,currWin)};
+    winText = {sprintf('%d',currMouse),sprintf('%d',currWin),sprintf('%d',currGenotype)};
     fid = fopen(filename,'a');
     if fid == -1, error('Cannot open file'); end
     
-    fprintf(fid, '%s,', winText{1}) ;
+    fprintf(fid, '%s,', winText{1});
+    fprintf(fid, '%s,', winText{2});
+    fprintf(fid, '%s,', winText{3});
     fclose('all');
     
     % write values

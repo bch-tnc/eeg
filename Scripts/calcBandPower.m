@@ -18,7 +18,7 @@ numBands = dim(1);
 bandPowers = zeros(1,numBands);
 meanPowers = zeros(1,numBands);
 
-figure(4)
+% figure(4)
 for i = 1:numBands
     currBand = bandDef(i,:);
     lowBound = currBand(1);
