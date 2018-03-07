@@ -104,14 +104,14 @@ for i = 1:numMice % step through all entries of mouseID
         currEntry = ia(i); % ex. mouseID 121 starts on row 5
         currEntryName = WOI(currEntry,1);
         offset = ia(i)-1;
-        currGenotype = WOI(currEntry,5);
+        currGenotype = WOI(currEntry,3);
         
         while (currEntryName == currMouse && currEntry <= numEntries)
             % calculate window indices
-            excelTime = WOI(currEntry,2); % col 2 contains the start time
+            excelTime = WOI(currEntry,4); % col 4 contains the start time
             timeDiff = excelTime - fracTime;
 
-            windowSize = WOI(currEntry,3)*60*Fs; % col 3 contains the length
+            windowSize = WOI(currEntry,5)*60*Fs; % col 5 contains the length
             sampleStart = round(timeDiff*86400*Fs)+1;
             sampleEnd = sampleStart + windowSize;
 
