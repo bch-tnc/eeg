@@ -1,4 +1,4 @@
-function [meanPowers,bandPowers] = calcBandPower(FFT,f,bandDef)
+function [meanPowers,bandPowers,totalPower,totalPowerAvg] = calcBandPower(FFT,f,bandDef)
 % function bandPower = calcBandPower(FFT,bandDef,f)
 % Oscillation band power calculation
 
@@ -6,10 +6,10 @@ function [meanPowers,bandPowers] = calcBandPower(FFT,f,bandDef)
 % default band definition
 if nargin < 3    
     bandDef = [0.5  4     % delta
-             4    8     % theta
-             8   13     % alpha
-            13   30     % beta
-            30   80];   % gamma
+               4    8     % theta
+               8   13     % alpha
+              13   30     % beta
+              30   80];   % gamma
 end
 bandNames = {'Delta','Theta','Alpha','Beta','Gamma'};
     
@@ -41,5 +41,12 @@ for i = 1:numBands
     meanPowers(i) = meanPower;
     bandPowers(i) = bandSum; 
 end
+
+% find total avg power over the entire 0.5-80Hz range
+lowBound = bandDef(1,1); upBound = bandDef(dim(1),dim(2));
+bandFFT       = FFT(find(f>=lowBound & f<upBound));
+fFFT          = f(find(f>=lowBound & f<upBound));
+totalPower    = sum(bandFFT);
+totalPowerAvg = totalPower/length(bandFFT);
 
 return
