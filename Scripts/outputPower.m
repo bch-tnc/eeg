@@ -15,8 +15,22 @@ cd(currExp)
 
 currExpPath = pwd;
 
+listing2 = dir(filename);
+
 filename = 'powerData.csv';
 header = {'Window','Delta','Theta','Alpha','Beta','Gamma'};
+
+% if listing.name == filename
+fid = fopen(filename,'a');
+if fid == -1, error('Cannot open file'); end
+
+% taken from
+% https://www.mathworks.com/matlabcentral/answers/70018-how-to-write-cell-array-into-a-csv-file
+% by Cedric Wannaz
+% writes entries in cell arrays to .csv file
+fprintf(fid, '%s,', header{1,1:end-1}) ;
+fprintf(fid, '%s\n', header{1,end}) ;
+fclose('all');
 
 numWin = size(expData,2);
 
@@ -25,6 +39,8 @@ for k = 1:numWin
     currWin   = expData(k).winNum;
     fprintf('Calculating Mouse %d Window %d\n',currMouse,currWin)
     currTrace = expData(k).trace;
+    currTrace(isnan(currTrace)) = 0; % make NaN and Inf values 0 so that
+    currTrace(isinf(currTrace)) = 0; % you get valid FFT
 
     N = 2.^nextpow2(length(currTrace));
     f = (-N/2:N/2-1)*(Fs/N);
@@ -48,6 +64,26 @@ for k = 1:numWin
     % normFactor = sum(bandsPowerRatio)/100;
     % bandsPowerRatio = bandsPowerRatio/normFactor;
 
+    winText = {sprintf('%d-%d',currMouse,currWin)};
+    fid = fopen(filename,'a');
+    if fid == -1, error('Cannot open file'); end
+    
+    fprintf(fid, '%s,', winText{1}) ;
+    fclose('all');
+    
+    dlmwrite(filename,bandPowerRatios,'precision',10,'-append','coffset',0);
+    
+% 
+%     fid = fopen(filename,'a');
+%     if fid == -1, error('Cannot open file'); end
+%     % taken from
+%     % https://www.mathworks.com/matlabcentral/answers/70018-how-to-write-cell-array-into-a-csv-file
+%     % by Cedric Wannaz
+%     % writes entries in cell arrays to .csv file
+%     fprintf(fid, '%s,', bandPowerRatios(1,1:end-1)) ;
+%     fprintf(fid, '%s\n', bandPowerRatios(1,end)) ;
+%     fclose('all');
+    
     % for-loop to color-code each band
     figure
     for l = 1:numBands
@@ -64,6 +100,6 @@ for k = 1:numWin
     xlim([0 numBands+1])
 end
 
-
+fclose('all');
 
 cd(scriptPath)
