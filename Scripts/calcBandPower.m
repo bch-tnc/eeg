@@ -1,5 +1,5 @@
 function [meanPowers,bandPowers,totalPower,totalPowerAvg] = calcBandPower(FFT,f,bandDef)
-% function bandPower = calcBandPower(FFT,bandDef,f)
+% function bandPower = calcBandPower(FFT,f,bandDef)
 % Oscillation band power calculation
 
 %% Power Bands Plot
@@ -18,26 +18,27 @@ numBands = dim(1);
 bandPowers = zeros(1,numBands);
 meanPowers = zeros(1,numBands);
 
+df = f(2)-f(1); % time step
+
 % figure(4)
+
 for i = 1:numBands
     currBand = bandDef(i,:);
     lowBound = currBand(1);
     upBound  = currBand(2);
     
+    % pull out FFT values corresponding to the vector and 
     % find index vector corresponding to desired band in FFT
-    tempF = f;
-    
-    % pull out FFT values corresponding to the vector
     bandFFT = FFT(find(f>=lowBound & f<upBound));
        fFFT = f(find(f>=lowBound & f<upBound));
     
-%     % plot the different bands
-%     plot(fFFT,bandFFT)
-%     hold on
+    % plot the different bands
+    plot(fFFT,bandFFT)
+    hold on
     
     % calculates absolute band powers and mean powers
     meanPower = mean(bandFFT);
-    bandSum = sum(bandFFT);
+    bandSum = sum(bandFFT)*df; 
     meanPowers(i) = meanPower;
     bandPowers(i) = bandSum; 
 end
@@ -46,7 +47,7 @@ end
 lowBound = bandDef(1,1); upBound = bandDef(dim(1),dim(2));
 bandFFT       = FFT(find(f>=lowBound & f<upBound));
 fFFT          = f(find(f>=lowBound & f<upBound));
-totalPower    = sum(bandFFT);
+totalPower    = sum(bandFFT)*df;
 totalPowerAvg = totalPower/length(bandFFT);
 
 return
