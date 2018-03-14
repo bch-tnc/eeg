@@ -90,5 +90,9 @@ for k = 1:numWin
 end
 
 fclose('all');
+savefile = 'expData.mat';
+save(savefile,'expData','Fs','startDate')
+fprintf('Saved experiment data to %s\n',savefile)
+
 
 cd(scriptPath)
