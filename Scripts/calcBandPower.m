@@ -37,10 +37,10 @@ for i = 1:numBands
     hold on
     
     % calculates absolute band powers and mean powers
-    meanPower = mean(bandFFT);
-    bandSum = sum(bandFFT)*df; 
-    meanPowers(i) = meanPower;
-    bandPowers(i) = bandSum; 
+    % meanPower = mean(bandFFT);
+    % bandSum = sum(bandFFT)*df; 
+    meanPowers(i) = mean(bandFFT);
+    bandPowers(i) = sum(bandFFT)*df; 
 end
 
 % find total avg power over the entire 0.5-80Hz range
