@@ -6,7 +6,7 @@
 % 0.5-100Hz bandpass)
 
 %% Metadata Collection
-origPath = pwd;
+scriptPath = pwd;
 scriptName = mfilename; % gets name of the script
 
 %% Extracting the Signal Windows
@@ -18,7 +18,7 @@ scriptName = mfilename; % gets name of the script
 % MouseID  | Start Time | Length (min)
 %
 % Format of Data:
-% Mouse ID: XXXX
+% Mouse ID: a number
 %     Time: Any time format that Excel knows (suggestion - HH:MM:SS (24hr))
 %   Length: In minutes (this resolution is probably good enough)
 %     Date: Any date format that Excel knows
@@ -34,10 +34,12 @@ scriptName = mfilename; % gets name of the script
 
 filename = 'WOI.xlsx'; % insert spreadsheet name here
 WOI = xlsread(filename);
+numEntries = size(WOI,1);
 
 % get directory name of the folder containing our stitched .mat data files
 % pathname = uigetdir;
 % for now, assume it's in the eeg/Data directory
+% also assume this script is in the eeg/Scripts Folder
 cd ..
 cd Data
 
@@ -50,21 +52,39 @@ mice = WOI(:,1);
 numMice = length(mouseID);
 
 %% Cycle Through .mat Files
-listing = dir('*.mat'); % returns a struct containing info about all .mat files
 
-dim = size(listing);
-numItems = dim(1);
+% constants
+SEC_PER_DAY = 86400;
+SEC_PER_MIN = 60;
+MIN_PER_HOUR = 60;
+
+% later, make extractWindows work for multiple experiments
+% for now, the folder w/ all the necessary .mat files are in 1 folder
+listing = dir;
+currExp = listing(10).name;
+
+cd(currExp)
+
+varFiles = dir('*Full*.mat'); % gets info about all .mat files with full EEG recordings in the current folder
+numVarFiles = size(varFiles,1);
+
+isData2Save = false;
+
+% create a struct
+expData = struct;
+currStructEntry = 1;
 
 % read in .mat file, perform operations
 for i = 1:numMice % step through all entries of mouseID
     currMouse = mouseID(i);
-    for j = 1:numItems % load the corresponding .mat file for the mouse
-        currFile = listing(j).name; % get filename
+    for j = 1:numVarFiles % load the corresponding .mat file for the mouse
+        currFile = varFiles(j).name; % get filename
         fileID = strsplit(currFile,'_'); % parse filename for mouseID
         fileID = str2num(char(fileID(1))); % str2num works for the startTime-> fracTime code below
         if currMouse == fileID
             load(currFile)
             fprintf('Loaded %s\n',currFile)
+            isData2Save = true;
             break % stop cycling through the filenames once we've found the file
         end
     end
@@ -74,29 +94,62 @@ for i = 1:numMice % step through all entries of mouseID
     % ex. 12:00pm is stored as 0.5
     % We convert startTime to this normalized fraction units first in order
     % to do comparisons.
-    
-    % convert startTime to fractional time
-    time = str2num(char(strsplit(char(startTime.EEG),':'))); % num format
-    hrs = time(1); min = time(2); sec = time(3);
-    fracTime = ((hrs*60 + min)*60 + sec)/86400; % 86400 is number of sec/day
-    
-    % calculate window indices
-    excelTime = WOI(numMice,2);
-    timeDiff = excelTime - fracTime;
+    if isData2Save
+        % convert startTime to fractional time
+        time = str2num(char(strsplit(char(startTime.EEG),':'))); % num format
+        hrs = time(1); min = time(2); sec = time(3);
+        fracTime = ((hrs*60 + min)*60 + sec)/86400; % 86400 is number of sec/day
+        
+        % loop through all WOI entries for a given mouseID
+        % assumes entries for same mouseID are next to each other
+        currEntry = ia(i); % ex. mouseID 121 starts on row 5
+        currEntryName = WOI(currEntry,1);
+        % offset = ia(i)-1;
+        currGenotype = WOI(currEntry,3); % col 3 is genotype
 
-    sampleStart = round(timeDiff*86400*Fs);
-    windowSize = WOI(numMice,3)*60*Fs;
-    sampleEnd = sampleStart + windowSize;
+        
+        while (currEntryName == currMouse && currEntry <= numEntries)
+            currWindow = WOI(currEntry,2); % col 2 is window type
+            
+            % calculate window indices
+            excelTime = WOI(currEntry,4); % col 4 contains the start time
+            timeDiff = excelTime - fracTime;
 
-    % plot, but also save the variables to a .mat file
-    % what to save??!!
-    % - the window of data, sampling rate, startDate, new startTime
-    % - figure out how to save new startDate later
-    trace_window = trace(sampleStart:sampleEnd,2);
-    savefile = sprintf('%d_Traces_W%d.mat',currMouse,1);
-    save(savefile,'trace_window','Fs','startDate')
-    fprintf('Saved to %s\n',savefile);
+            windowSize = WOI(currEntry,5)*60*Fs; % col 5 contains the length
+            sampleStart = round(timeDiff*86400*Fs)+1;
+            sampleEnd = sampleStart + windowSize;
+
+            % saves certain variables to a .mat file
+            % - the window of data, sampling rate, startDate, new startTime
+            % - figure out how to save new startDate later
+            trace_window = trace(sampleStart:sampleEnd,2);
+            % windowNum = currEntry - offset;
+            savefile = sprintf('%d_Traces_W%d.mat',currMouse,currWindow);
+            save(savefile,'trace_window','Fs','startDate')
+            fprintf('Saved to %s\n',savefile);
+            
+            % add data to the experimentData struct
+            expData(currStructEntry).mouse = currMouse;
+            expData(currStructEntry).winNum = currWindow;
+            expData(currStructEntry).trace = trace_window;
+            expData(currStructEntry).genotype = currGenotype;
+
+            currEntry = currEntry + 1;
+            currStructEntry = currStructEntry + 1;
+
+            if currEntry < numEntries
+                currEntryName = WOI(currEntry,1);
+            end
+        end
+    end
+    
+    isData2Save = false;
 end
 
+% save experiment data
+savefile = sprintf('expData.mat');
+save(savefile,'expData','Fs','startDate')
+fprintf('Saved experiment data to %s\n',savefile)
+
 %% Return to Sender
-cd(origPath)
+cd(scriptPath)

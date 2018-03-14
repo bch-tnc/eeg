@@ -81,6 +81,7 @@ end
 
 
 for n=1:length(mouse)
+fprintf('Working with %s\n',char(mouse(n)))
 %get all files for appropriate mouse number
 filefilter = strcat(mouse{n}, '.*');
 filelist = dir(filefilter);
@@ -103,36 +104,33 @@ if eeg_select == 1
     %Filter: only select EEG text files, and add them to their own list for loading
     for j=1:nFiles
         if isempty(strfind(filelist(j).name, 'EEG')) == 0 && isempty(strfind(filelist(j).name, '.txt')) == 0
-            
             EEGfilelist{listcount} = filelist(j).name;
             listcount = listcount +1;
         end
         
     end
     
-    %get start time info from header
-    fid = fopen(EEGfilelist{1});
-            paramIds = textscan(fid,'%s %s %s %s',1,'HeaderLines',1);
-            fclose(fid);
-            startDate.EEG = paramIds{3};
-            startTime.EEG = paramIds{4};
-    
-            
-            testEEGChan = importdata(char(EEGfilelist(1)), ',', 5);
-       if iscell(testEEGChan) == 1
-           twochannel = 1;
-       else
-           twochannel = 0;
-       end
-       
-       %clear testEEGchan
-    
     if isempty(EEGfilelist) == 0
+        %get start time info from header
+        fid = fopen(EEGfilelist{1});
+        paramIds = textscan(fid,'%s %s %s %s',1,'HeaderLines',1);
+        fclose(fid);
+        startDate.EEG = paramIds{3};
+        startTime.EEG = paramIds{4};
+            
+        testEEGChan = importdata(char(EEGfilelist(1)), ',', 5);
+        
+        if iscell(testEEGChan) == 1
+            twochannel = 1;
+        else
+            twochannel = 0;
+        end
+        %clear testEEGchan
+        
         %total number of EEG text files
         tot_EEGfiles=length(EEGfilelist);
         
         %variable that holds trace of concatenated EEG traces
-        
         
         %loading bar
         if waitbarOn == 1
@@ -151,7 +149,7 @@ if eeg_select == 1
                 newData = importdata(char(EEGfilelist(ii)), ',', 5);
             end
             
-            if twochannel == 1;
+            if twochannel == 1
                 newData = importdata(char(EEGfilelist(ii)), ',', 6);
             end
             
@@ -616,14 +614,16 @@ savestring = strcat(mouse{n}, '_Traces_Full.mat');
 currPath=pwd;
 cd('..')
 
+% Saving data, status messages
 fprintf('Saving %s to disk...\n', savestring)
 % save final output as a matlab binary file for speed
 save(savestring, 'trace', 'trace_temp', 'trace_activity', 'trace_signalstr', 'trace_freqPulse', 'n','mouse',...
     'Fs', 'Fs_temp', 'Fs_sig', 'Fs_activity','startTime','startDate', '-v7')
+fprintf('done!\n')
+
 
 %return to original path w/ text files for next mouse
 cd(currPath)
-fprintf('done!\n')
 
 end
 
