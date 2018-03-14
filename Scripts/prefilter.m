@@ -3,7 +3,7 @@
 % smeared out by windowing
 % Would I need antialiasing filter???
 
-origPath = pwd;
+scriptPath = pwd;
 cd ..
 cd Data
 
@@ -64,4 +64,4 @@ title('Trace Window Plots')
 legend('Original','Bandpass Filtered')
 
 
-cd(origPath)
+cd(scriptPath)
