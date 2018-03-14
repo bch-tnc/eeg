@@ -1,5 +1,7 @@
 %% calcGroupAvg
 % calculates the power avgs amongst an experiment's mice
+% in the future, add option to also sort by treatment type
+% also add ability to check possible window types
 
 scriptPath = pwd;
 cd ..
@@ -15,8 +17,8 @@ currExpPath = pwd;
 
 load('expData.mat')
 
-genotype = input('What genotype to average? (Enter a number)');
-window   = input('What window to average? (Enter a number)');
+genotype = input('What genotype to average? (Enter a number): ');
+window   = input('What window to average? (Enter a number): ');
 
 numBands = length(expData(1).powerRatios);
 powerSum = zeros(1,numBands);
@@ -30,6 +32,6 @@ for k = 1:length(expData)
     end
 end
 
-powerAvg = powerSum/numWin
+powerAvg = powerSum/numWin;
 %% Return to Sender
 cd(scriptPath)
