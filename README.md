@@ -1,5 +1,6 @@
 EEG Analysis Tools
-- a project by Kenny Yau -
+- a project by Kenny Yau
+- last updated: 07-Mar-2018
 
 Current Project Objectives:
 - optimize the data conversion flow (all the steps before applying the processing)
