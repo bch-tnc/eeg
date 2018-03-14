@@ -67,8 +67,11 @@ for k = 1:numWin
     fprintf(fid, '%s,', winText{3});
     fclose('all');
     
-    % write values
+    % write values to .csv
     dlmwrite(filename,bandPowerRatios,'precision',10,'-append','coffset',0);
+    
+    % save values to expData
+    expData(k).powerRatios = bandPowerRatios;
     
 %     % for-loop to color-code each band
 %     figure
