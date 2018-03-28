@@ -3,6 +3,7 @@ EEG Analysis Tools
 - last updated: 28-Mar-2018
 
 Current Project Objectives:
+- decide how to save subwindows
 - polish the features we currently have
 
 Future Project Objectives
@@ -52,4 +53,5 @@ After all of this, the result should be:
 	- a vector of power band averages for the windows you specify gets printed out
 
 At this moment, running DSI_Load.m, extractWindows.m, and outputPower.m works pretty smoothly. calcGroupAvg.m works too
-but it only checks for window type and genotype, not treatment
+but it only checks for window type and genotype, not treatment. Subwindows are currently not saved in a nice struct; 
+each subwindow gets saved in its own .mat file.
