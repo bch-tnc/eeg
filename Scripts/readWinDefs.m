@@ -2,11 +2,10 @@ function winDefs = readWinDefs(excelFile)
 % function winDefs = readWinDefs(excelFile)
 
 if nargin < 1
-    excelFile = 'windowDefinition.xlsx';
+    excelFile = 'windowDefinitions.xlsx';
 end
 
-filename = 'windowDefinitions.xlsx'; % insert spreadsheet name here
-winDefs = xlsread(filename);
+winDefs = xlsread(excelFile);
 
 
 return
