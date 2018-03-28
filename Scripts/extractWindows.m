@@ -110,14 +110,15 @@ for i = 1:numMice % step through all entries of mouseID
         
         while (currEntryName == currMouse && currEntry <= numEntries)
             currWindow = WOI(currEntry,2); % col 2 is window type
-
+            excelTime  = WOI(currEntry,4); % col 4 contains the start time
+            windowLengthMin = winDefs(currWindow,2);
+ 
             % calculate window indices
-            relStartTime = winDefs(currWindow,2); % col 2 is the relative start time
-            windowLengthMin = winDefs(currWindow,3);
-            windowSize = windowLengthMin*SEC_PER_MIN*Fs; % col 3 is the length
-            sampleStart = round(relStartTime*SEC_PER_MIN*Fs)+1;
+            timeDiff = excelTime - fracTime;
+            windowSize = windowLengthMin*SEC_PER_MIN*Fs;
+            sampleStart = round(timeDiff*SEC_PER_DAY*Fs)+1;
             sampleEnd = sampleStart + windowSize;
-
+            
             % saves certain variables to a .mat file
             % - the window of data, sampling rate, startDate, new startTime
             % - figure out how to save new startDate later
@@ -127,7 +128,7 @@ for i = 1:numMice % step through all entries of mouseID
             fprintf('Saved to %s\n',savefile);
             
             % subwindows-related variables
-            numSubWindows = winDefs(currWindow,4);
+            numSubWindows = winDefs(currWindow,3);
             subwindowSize = floor(windowLengthMin/numSubWindows*SEC_PER_MIN*Fs);
             subwindowStart = 1;
             subwindowEnd = subwindowStart+subwindowSize;  
