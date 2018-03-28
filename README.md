@@ -3,19 +3,23 @@ EEG Analysis Tools
 - last updated: 14-Mar-2018
 
 Current Project Objectives:
-- have MATLAB generate mini-windows for a bigger window
+- polish the features we currently have
 
 Future Project Objectives
 - add analyses tools
 - automate the data conversion process
 - add treatment type as a parameter
+- average the entire FFT for multiple mice of the same genotype
+- use a periodogram instead of an fft in the power band value calculations
+- pinpoint the peak frequency within a power band (Alex's suggestion)
 
 Current Dataflow Design:
 - record eeg data using neuroscore
 - convert proprietary neuroscore chunks into non-proprietary .csv (or .txt) chunks using neuroscore
 - stitch together .csv chunks into contiguous signals and save as .mat files using DSI_Load.m
 - apply the filters that make sense to apply before the recording gets chopped up
-- populate an Excel Sheet with the window times and durations of interest for each mouse
+- define window types in windowDefinition.xlsx
+- populate WOI.xlsx with the window types and start times of interest for each mouse
 - using the above Excel Sheet, extract these windows of interest (WoI) with extractWindows.m
 - apply any other filters necessary (none at the moment)
 - calculate oscillation band power for each WoI and save data to Excel spreadsheet
@@ -25,9 +29,8 @@ Current Proposed Dataflow Design:
 - convert proprietary neuroscore chunks into non-proprietary .csv (or .txt) chunks using neuroscore
 - stitch together .csv chunks into contiguous signals and save as .mat files using DSI_Load.m
 - apply the filters that make sense to apply before the recording gets chopped up
-- populate an Excel Sheet with the window times and durations of interest for each mouse
-- have a script generate the correct window times and durations for you
-- using the above Excel Sheet, extract these windows of interest (WoI) with extractWindows.m
+- define window types in windowDefinition.xlsx
+- populate WOI.xlsx with the window types and start times of interest for each mouse
 - apply any other filters necessary (none at the moment)
 - calculate oscillation band power for each WoI and save data to Excel spreadsheet
 - run a script to average the power band values we are interested in
@@ -35,6 +38,7 @@ Current Proposed Dataflow Design:
 Steps to Run this Analyses:
 (skipping the neuroscore-dependent operations)
 - run DSI_Load
+- check correct window definitions exist in windowDefinition.xlsx
 - populate .xlsx w/ windows of interest (WoI)
 - run prefilter.m (not implemented yet)
 - run extractWindows.m
