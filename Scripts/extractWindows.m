@@ -110,18 +110,11 @@ for i = 1:numMice % step through all entries of mouseID
         
         while (currEntryName == currMouse && currEntry <= numEntries)
             currWindow = WOI(currEntry,2); % col 2 is window type
-            
-%             % calculate window indices
-%             excelTime = WOI(currEntry,4); % col 4 contains the start time
-%             timeDiff = excelTime - fracTime;
-% 
-%             windowSize = WOI(currEntry,5)*60*Fs; % col 5 contains the length
-%             sampleStart = round(timeDiff*86400*Fs)+1;
-%             sampleEnd = sampleStart + windowSize;
 
             % calculate window indices
             relStartTime = winDefs(currWindow,2); % col 2 is the relative start time
-            windowSize = winDefs(currWindow,3)*SEC_PER_MIN*Fs; % col 3 is the length
+            windowLengthMin = winDefs(currWindow,3);
+            windowSize = windowLengthMin*SEC_PER_MIN*Fs; % col 3 is the length
             sampleStart = round(relStartTime*SEC_PER_MIN*Fs)+1;
             sampleEnd = sampleStart + windowSize;
 
@@ -133,6 +126,29 @@ for i = 1:numMice % step through all entries of mouseID
             save(savefile,'trace_window','Fs','startDate')
             fprintf('Saved to %s\n',savefile);
             
+            % save subwindows
+            numSubWindows = winDefs(currWindow,4);
+            subwindowSize = floor(windowLengthMin/numSubWindows*SEC_PER_MIN*Fs);
+            subwindowStart = 1;
+            subwindowEnd = subwindowStart+subwindowSize;  
+            
+            figure
+            plot(trace_window)
+            hold on
+            
+            for k = 1:numSubWindows
+                subwindow = trace_window(subwindowStart:subwindowEnd);
+                savefile = sprintf('%d_Traces_W%d-%d.mat',currMouse,currWindow,k);
+                save(savefile,'subwindow','Fs','startDate')
+                fprintf('Saved sub-window to %s\n',savefile);
+                
+                plot(subwindowStart:subwindowEnd,subwindow)
+                hold on
+                
+                subwindowStart = subwindowStart + subwindowSize;
+                subwindowEnd = subwindowEnd + subwindowSize;
+            end
+                
             % add data to the experimentData struct
             expData(currStructEntry).mouse = currMouse;
             expData(currStructEntry).winNum = currWindow;
