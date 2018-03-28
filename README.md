@@ -1,6 +1,6 @@
 EEG Analysis Tools
 - a project by Kenny Yau
-- last updated: 14-Mar-2018
+- last updated: 28-Mar-2018
 
 Current Project Objectives:
 - polish the features we currently have
