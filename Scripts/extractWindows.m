@@ -2,8 +2,7 @@
 % Kenny Yau
 
 % assumes that the necessary data files have already been stitched with
-% DSI_Load.m, and that the window definition matrix has been loaded with
-% (tentatively) generateWOI.m
+% DSI_Load.m, and that the window definitions have been updated
 
 %% Metadata Collection
 scriptPath = pwd;
@@ -31,6 +30,9 @@ scriptName = mfilename; % gets name of the script
 %
 % So far, all requirements are stored during the recording process, and the
 % .mat files saved by DSI_Load contains this information.
+
+winDefs = readWinDefs();
+numWinDefs = size(winDefs,1);
 
 filename = 'WOI.xlsx'; % insert spreadsheet name here
 WOI = xlsread(filename);
