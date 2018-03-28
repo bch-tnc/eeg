@@ -2,7 +2,8 @@
 % Kenny Yau
 
 % assumes that the necessary data files have already been stitched with
-% DSI_Load.m
+% DSI_Load.m, and that the window definition matrix has been loaded with
+% (tentatively) generateWOI.m
 
 %% Metadata Collection
 scriptPath = pwd;
