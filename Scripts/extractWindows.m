@@ -126,16 +126,20 @@ for i = 1:numMice % step through all entries of mouseID
             save(savefile,'trace_window','Fs','startDate')
             fprintf('Saved to %s\n',savefile);
             
-            % save subwindows
+            % subwindows-related variables
             numSubWindows = winDefs(currWindow,4);
             subwindowSize = floor(windowLengthMin/numSubWindows*SEC_PER_MIN*Fs);
             subwindowStart = 1;
             subwindowEnd = subwindowStart+subwindowSize;  
             
+            % visualize subwindows
             figure
             plot(trace_window)
+            text = sprintf('Animal %d, Window %d',currMouse,currWindow);
+            title(text)
             hold on
             
+            % save subwindows
             for k = 1:numSubWindows
                 subwindow = trace_window(subwindowStart:subwindowEnd);
                 savefile = sprintf('%d_Traces_W%d-%d.mat',currMouse,currWindow,k);
