@@ -45,7 +45,7 @@ cd Data
 
 % get list of needed mouse IDs
 mice = WOI(:,1);
-[mouseID,ia,ic] = unique(mice); % use ia to associate multiple start times 
+[mouseID,firstEntryRow,~] = unique(mice); % use ia to associate multiple start times 
                                 % with the same mouseID. it contains the
                                 % index of the first instance of a unique
                                 % mouseID.
@@ -102,28 +102,33 @@ for i = 1:numMice % step through all entries of mouseID
         
         % loop through all WOI entries for a given mouseID
         % assumes entries for same mouseID are next to each other
-        currEntry = ia(i); % ex. mouseID 121 starts on row 5
+        currEntry = firstEntryRow(i); % ex. mouseID 121 starts on row 5
         currEntryName = WOI(currEntry,1);
-        % offset = ia(i)-1;
+        % offset = firstEntryRow(i)-1;
         currGenotype = WOI(currEntry,3); % col 3 is genotype
 
         
         while (currEntryName == currMouse && currEntry <= numEntries)
             currWindow = WOI(currEntry,2); % col 2 is window type
             
-            % calculate window indices
-            excelTime = WOI(currEntry,4); % col 4 contains the start time
-            timeDiff = excelTime - fracTime;
+%             % calculate window indices
+%             excelTime = WOI(currEntry,4); % col 4 contains the start time
+%             timeDiff = excelTime - fracTime;
+% 
+%             windowSize = WOI(currEntry,5)*60*Fs; % col 5 contains the length
+%             sampleStart = round(timeDiff*86400*Fs)+1;
+%             sampleEnd = sampleStart + windowSize;
 
-            windowSize = WOI(currEntry,5)*60*Fs; % col 5 contains the length
-            sampleStart = round(timeDiff*86400*Fs)+1;
+            % calculate window indices
+            relStartTime = winDefs(currWindow,2); % col 2 is the relative start time
+            windowSize = winDefs(currWindow,3)*SEC_PER_MIN*Fs; % col 3 is the length
+            sampleStart = round(relStartTime*SEC_PER_MIN*Fs)+1;
             sampleEnd = sampleStart + windowSize;
 
             % saves certain variables to a .mat file
             % - the window of data, sampling rate, startDate, new startTime
             % - figure out how to save new startDate later
             trace_window = trace(sampleStart:sampleEnd,2);
-            % windowNum = currEntry - offset;
             savefile = sprintf('%d_Traces_W%d.mat',currMouse,currWindow);
             save(savefile,'trace_window','Fs','startDate')
             fprintf('Saved to %s\n',savefile);
