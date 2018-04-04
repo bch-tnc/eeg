@@ -2,7 +2,7 @@ function winDefs = readWinDefs(excelFile)
 % function winDefs = readWinDefs(excelFile)
 
 if nargin < 1
-    excelFile = 'windowDefinitions.xlsx';
+    excelFile = 'winDefs.xlsx';
 end
 
 winDefs = xlsread(excelFile);

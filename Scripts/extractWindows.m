@@ -13,14 +13,14 @@ scriptName = mfilename; % gets name of the script
 % data
 %
 % Spreadsheet format will be:
-% Column A | Column B   | Column C
-% MouseID  | Start Time | Length (min)
+% Column A | Column B | Column C | Column D   |
+% MouseID  | Window # | Genotype | Start Time |
 %
-% Format of Data:
-% Mouse ID: a number
+% Explanation of spreadsheet entries:
+% Mouse ID: a number identifier for the mouse
+% Window #: corresponds to the kind of window defined in winDefs.xlsx
+% Genotype: genotype of the mouse
 %     Time: Any time format that Excel knows (suggestion - HH:MM:SS (24hr))
-%   Length: In minutes (this resolution is probably good enough)
-%     Date: Any date format that Excel knows
 %
 % This requires certain information to be already present;
 % i.e. sampling rate of data and start time of the recording.
