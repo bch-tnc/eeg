@@ -4,8 +4,9 @@ EEG Analysis Tools
 
 Current Project Objectives:
 - decide how to save subwindows
-- use a periodogram instead of an fft in the power band value calculations
-- polish the features we currently have
+- polish the features we currently have, e.g.
+	- correctly calculate power band values
+	- use a periodogram instead of an fft in the power band value calculations
 
 Future Project Objectives
 - add analyses tools
@@ -48,6 +49,8 @@ After all of this, the result should be:
 	- a .csv file with the power band values
 	- a vector of power band averages for the windows you specify gets printed out
 
-At this moment, running DSI_Load.m, extractWindows.m, and outputPower.m works pretty smoothly. calcGroupAvg.m works too
-but it only checks for window type and genotype, not treatment. Subwindows are currently not saved in a nice struct; 
-each subwindow gets saved in its own .mat file.
+At this moment, running DSI_Load.m, extractWindows.m, and outputPower.m works pretty smoothly.
+However, power values are not calculated correctly
+calcGroupAvg.m works too, but it only checks for window type and genotype, not treatment. 
+Subwindows are currently not saved in a nice struct; each subwindow gets saved in its own .mat file.
+Power values are saved within the expData struct.
