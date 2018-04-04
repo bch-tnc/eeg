@@ -38,13 +38,6 @@ filename = 'WOI.xlsx'; % insert spreadsheet name here
 WOI = xlsread(filename);
 numEntries = size(WOI,1);
 
-% get directory name of the folder containing our stitched .mat data files
-% pathname = uigetdir;
-% for now, assume it's in the eeg/Data directory
-% also assume this script is in the eeg/Scripts Folder
-cd ..
-cd Data
-
 % get list of needed mouse IDs
 mice = WOI(:,1);
 [mouseID,firstEntryRow,~] = unique(mice); % use ia to associate multiple start times 
@@ -60,12 +53,19 @@ SEC_PER_DAY = 86400;
 SEC_PER_MIN = 60;
 MIN_PER_HOUR = 60;
 
+% get directory name of the folder containing our stitched .mat data files
+% pathname = uigetdir;
+% for now, assume it's in the eeg/Data directory
+% also assume this script is in the eeg/Scripts Folder
+cd ..
+cd Data
+
 % later, make extractWindows work for multiple experiments
 % for now, the folder w/ all the necessary .mat files are in 1 folder
-listing = dir;
-currExp = listing(10).name;
+currExp = 'BL-Tsc2 PP 65';
 
-cd(currExp)
+
+cd('G:\EEG\G1')
 
 varFiles = dir('*Full*.mat'); % gets info about all .mat files with full EEG recordings in the current folder
 numVarFiles = size(varFiles,1);
@@ -109,8 +109,8 @@ for i = 1:numMice % step through all entries of mouseID
         % offset = firstEntryRow(i)-1;
         currGenotype = WOI(currEntry,3); % col 3 is genotype
 
-        
-        while (currEntryName == currMouse && currEntry <= numEntries)
+        % implementing a do-while loop
+        while true
             currWindow = WOI(currEntry,2); % col 2 is window type
             excelTime  = WOI(currEntry,4); % col 4 contains the start time
             windowLengthMin = winDefs(currWindow,2);
@@ -162,11 +162,17 @@ for i = 1:numMice % step through all entries of mouseID
             expData(currStructEntry).trace = trace_window;
             expData(currStructEntry).genotype = currGenotype;
 
+            % move to next item in WOI
             currEntry = currEntry + 1;
             currStructEntry = currStructEntry + 1;
-
-            if currEntry < numEntries
+            if currEntry <= numEntries
                 currEntryName = WOI(currEntry,1);
+            end
+%             text = sprintf('currEntry: %d | currStructEntry: %d | currEntryName: %d',currEntry,currStructEntry,currEntryName);
+%             disp(text)
+            
+            if ~(currEntryName == currMouse && currEntry <= numEntries)
+                break;
             end
         end
     end
