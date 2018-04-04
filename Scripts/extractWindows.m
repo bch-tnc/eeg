@@ -171,7 +171,7 @@ for i = 1:numMice % step through all entries of mouseID
 %             text = sprintf('currEntry: %d | currStructEntry: %d | currEntryName: %d',currEntry,currStructEntry,currEntryName);
 %             disp(text)
             
-            if ~(currEntryName == currMouse && currEntry <= numEntries)
+            if currEntryName ~= currMouse || currEntry > numEntries
                 break;
             end
         end
