@@ -55,17 +55,9 @@ MIN_PER_HOUR = 60;
 
 % get directory name of the folder containing our stitched .mat data files
 % pathname = uigetdir;
-% for now, assume it's in the eeg/Data directory
-% also assume this script is in the eeg/Scripts Folder
-cd ..
-cd Data
-
-% later, make extractWindows work for multiple experiments
-% for now, the folder w/ all the necessary .mat files are in 1 folder
-currExp = 'BL-Tsc2 PP 65';
-
-
-cd('G:\EEG\G1')
+% for now, just run off the hard drive
+currExpPath = 'G:\EEG\G1';
+cd(currExpPath)
 
 varFiles = dir('*Full*.mat'); % gets info about all .mat files with full EEG recordings in the current folder
 numVarFiles = size(varFiles,1);

@@ -2,16 +2,11 @@
 % Writes Power Band Values to a .csv file
 
 scriptPath = pwd;
-cd ..
-cd Data
-
-% later, make outputPower automatically cycle through all experiments
-% for now, the script runs on a specific folder
-listing = dir;
-currExp = listing(10).name;
-
-cd(currExp)
-currExpPath = pwd;
+% get directory name of the folder containing our stitched .mat data files
+% pathname = uigetdir;
+% for now, just run off the hard drive
+currExpPath = 'G:\EEG\G1';
+cd(currExpPath)
 
 filename = 'powerData.csv';
 header = {'Mouse','Window','Genotype','Delta','Theta','Alpha','Beta','Gamma'};
@@ -90,6 +85,8 @@ for k = 1:numWin
 end
 
 fclose('all');
+% why am I saving to expData.mat? won't it overwrite what I calculated in
+% extractWindows.m?: you don't - you also save the powerratio values
 savefile = 'expData.mat';
 save(savefile,'expData','Fs','startDate')
 fprintf('Saved experiment data to %s\n',savefile)
