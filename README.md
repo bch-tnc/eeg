@@ -3,9 +3,10 @@ EEG Analysis Tools
 - last updated: 04-Apr-2018
 
 Current Project Objectives:
-- decide how to save subwindows
+- save .mat files in the root directory
 - polish the features we currently have, e.g.
 	- correctly calculate power band values
+	- calculate power band values for each subwindow
 	- use a periodogram instead of an fft in the power band value calculations
 	- averaging power band values by drug treatment type, genotype, etc
 

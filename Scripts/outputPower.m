@@ -1,9 +1,14 @@
 %% outputPower
 % Writes Power Band Values to a .csv file
 
+bandDef = [0.5  4     % delta
+           4    8     % theta
+           8   13     % alpha
+          13   30     % beta
+          30   80];   % gamma
+bandNames = {'Delta','Theta','Alpha','Beta','Gamma'};
+
 scriptPath = pwd;
-% get directory name of the folder containing our stitched .mat data files
-currExpPath = uigetdir;
 cd(currExpPath)
 
 filename = 'powerData.csv';
@@ -39,7 +44,7 @@ for k = 1:numWin
 
     % calculate power band values
     cd(scriptPath)
-    [meanPowers,bandPowers,totalPower,totalPowerAvg] = calcBandPower(FFT,f);
+    [bandPowers,totalPower] = calcBandPower(FFT,f);
     cd(currExpPath)
 
 %     % works just as well as the summing method in the for-loop
@@ -48,7 +53,7 @@ for k = 1:numWin
 %     totalPower = sum(FFTbands);
 %     totalPowerAvg = totalPower/length(FFTbands);
 
-    bandPowerRatios = meanPowers/totalPowerAvg;
+    bandPowerRatios = bandPowers/totalPower;
 
     % write label
     winText = {sprintf('%d',currMouse),sprintf('%d',currWin),sprintf('%d',currGenotype)};
@@ -66,20 +71,21 @@ for k = 1:numWin
     % save values to expData
     expData(k).powerRatios = bandPowerRatios;
     
-%     % for-loop to color-code each band
-%     figure
-%     for l = 1:numBands
-%         stem(l,bandPowerRatios(l))
-%         hold on
-%     end
-%     hold off
-%     text = sprintf('Mouse %d Power Ratio',currMouse);
-%     title(text)
-%     set(gca,'xtick',1:numBands,'xticklabel',bandNames) % labels each stem w/ text
-%     xlabel('Band')
-%     ylabel('Power')
-%     legend(bandNames)
-%     xlim([0 numBands+1])
+    % for-loop to color-code each band
+    figure
+    
+    numBands = 5;
+    for l = 1:numBands
+        bar(l,bandPowerRatios(l))
+        hold on
+    end
+    hold off
+    text = sprintf('Mouse %d Power Ratio',currMouse);
+    title(text)
+    set(gca,'xtick',1:numBands,'xticklabel',bandNames) % labels each stem w/ text
+    xlabel('Band')
+    ylabel('Power')
+    xlim([0 numBands+1])
 end
 
 fclose('all');

@@ -4,6 +4,11 @@
 % assumes that the necessary data files have already been stitched with
 % DSI_Load.m, and that the window definitions have been updated
 
+%% Constants
+SEC_PER_DAY = 86400;
+SEC_PER_MIN = 60;
+MIN_PER_HOUR = 60;
+
 %% Metadata Collection
 scriptPath = pwd;
 scriptName = mfilename; % gets name of the script
@@ -47,11 +52,6 @@ mice = WOI(:,1);
 numMice = length(mouseID);
 
 %% Cycle Through .mat Files
-
-% constants
-SEC_PER_DAY = 86400;
-SEC_PER_MIN = 60;
-MIN_PER_HOUR = 60;
 
 % get directory name of the folder containing our stitched .mat data files
 currExpPath = uigetdir;
