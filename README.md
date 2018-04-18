@@ -7,6 +7,7 @@ Current Project Objectives:
 - polish the features we currently have, e.g.
 	- correctly calculate power band values
 	- use a periodogram instead of an fft in the power band value calculations
+	- averaging power band values by drug treatment type, genotype, etc
 
 Future Project Objectives
 - add analyses tools
