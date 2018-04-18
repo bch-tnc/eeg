@@ -4,17 +4,10 @@
 % also add ability to check possible window types
 
 scriptPath = pwd;
-cd ..
-cd Data
 
 % later, make the script automatically cycle through all experiments
 % for now, the script runs on a specific folder
-listing = dir;
-currExp = listing(10).name;
-
-cd(currExp)
-currExpPath = pwd;
-
+cd(currExpPath)
 load('expData.mat')
 
 genotype = input('What genotype to average? (Enter a number): ');

@@ -54,9 +54,7 @@ SEC_PER_MIN = 60;
 MIN_PER_HOUR = 60;
 
 % get directory name of the folder containing our stitched .mat data files
-% pathname = uigetdir;
-% for now, just run off the hard drive
-currExpPath = 'G:\EEG\G1';
+currExpPath = uigetdir;
 cd(currExpPath)
 
 varFiles = dir('*Full*.mat'); % gets info about all .mat files with full EEG recordings in the current folder
@@ -137,9 +135,9 @@ for i = 1:numMice % step through all entries of mouseID
             % save subwindows
             for k = 1:numSubWindows
                 subwindow = trace_window(subwindowStart:subwindowEnd);
-                savefile = sprintf('%d_Traces_W%d-%d.mat',currMouse,currWindow,k);
-                save(savefile,'subwindow','Fs','startDate')
-                fprintf('Saved sub-window to %s\n',savefile);
+%                 savefile = sprintf('%d_Traces_W%d-%d.mat',currMouse,currWindow,k);
+%                 save(savefile,'subwindow','Fs','startDate')
+%                 fprintf('Saved sub-window to %s\n',savefile);
                 
                 plot(subwindowStart:subwindowEnd,subwindow)
                 hold on

@@ -3,9 +3,7 @@
 
 scriptPath = pwd;
 % get directory name of the folder containing our stitched .mat data files
-% pathname = uigetdir;
-% for now, just run off the hard drive
-currExpPath = 'G:\EEG\G1';
+currExpPath = uigetdir;
 cd(currExpPath)
 
 filename = 'powerData.csv';
