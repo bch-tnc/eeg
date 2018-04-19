@@ -7,6 +7,7 @@ bandDef = [0.5  4     % delta
           13   30     % beta
           30   80];   % gamma
 bandNames = {'Delta','Theta','Alpha','Beta','Gamma'};
+numBands = size(bandDef,1);
 
 scriptPath = pwd;
 cd(currExpPath)
@@ -74,7 +75,6 @@ for k = 1:numWin
     % for-loop to color-code each band
     figure
     
-    numBands = 5;
     for l = 1:numBands
         bar(l,bandPowerRatios(l))
         hold on
@@ -82,7 +82,7 @@ for k = 1:numWin
     hold off
     text = sprintf('Mouse %d Power Ratio',currMouse);
     title(text)
-    set(gca,'xtick',1:numBands,'xticklabel',bandNames) % labels each stem w/ text
+    set(gca,'xtick',1:numBands,'xticklabel',bandNames) % labels each bar w/ text
     xlabel('Band')
     ylabel('Power')
     xlim([0 numBands+1])
