@@ -175,6 +175,10 @@ for i = 1:numMice % step through all entries of mouseID
             
             expData(currStructEntry).powerRatios = powerRatios;
             
+            % save power ratios
+            cd(scriptPath)
+            savePowerRatios(expData(currStructEntry),currExpPath)
+            
             % move to next item in WOI
             currEntry = currEntry + 1;
             currStructEntry = currStructEntry + 1;
