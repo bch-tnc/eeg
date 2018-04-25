@@ -5,6 +5,7 @@ EEG Analysis Tools
 Current Project Objectives:
 - calculate power band values for each subwindow
 - save subwindow power band values in a matrix along with full-window power band values
+- change saving powerband values to be outside of calcPowerRatios
 - averaging power band values by drug treatment type, genotype, etc (don't recalculate power ratios)
 - add an isPlotted boolean to control graph output
 - use a periodogram instead of an fft in the power band value calculations
@@ -57,4 +58,5 @@ Power values are calculated correctly
 calcGroupAvg.m works too, but it only checks for window type and genotype, not treatment. 
 Subwindows are no longer saved; only the parent trace is saved
 Power values are saved within the expData struct under the powerRatios field
+Subwindow power band values are also calculated
 The first row of the powerRatios field is power band values for the parent window; subsequent rows are that of subwindows

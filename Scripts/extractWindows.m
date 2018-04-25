@@ -132,16 +132,31 @@ for i = 1:numMice % step through all entries of mouseID
             title(text)
             hold on
             
+            subwinStartIdx = zeros(1,numSubWindows);
+            powerRatios = zeros(numSubWindows+1,5);
+            
             % save subwindows
             for k = 1:numSubWindows
                 subwindow = trace_window(subwindowStart:subwindowEnd);
 %                 savefile = sprintf('%d_Traces_W%d-%d.mat',currMouse,currWindow,k);
 %                 save(savefile,'subwindow','Fs','startDate')
 %                 fprintf('Saved sub-window to %s\n',savefile);
+
+                % create subwindow struct
+                subwinData = struct;
+                subwinData.mouse = currMouse;
+                subwinData.winNum = k;
+                subwinData.trace = subwindow;
+                subwinData.genotype = currGenotype;
+                subwinData.Fs = Fs;
+                
+                cd(scriptPath)
+                powerRatios(k+1,:) = calcPowerRatios(subwinData,scriptPath,currExpPath)
                 
                 plot(subwindowStart:subwindowEnd,subwindow)
                 hold on
                 
+                subwinStartIdx(k) = subwindowStart;
                 subwindowStart = subwindowStart + subwindowSize;
                 subwindowEnd = subwindowEnd + subwindowSize;
             end
@@ -152,9 +167,11 @@ for i = 1:numMice % step through all entries of mouseID
             expData(currStructEntry).trace = trace_window;
             expData(currStructEntry).genotype = currGenotype;
             expData(currStructEntry).Fs = Fs;
+            expData(currStructEntry).subwinStartIdx = subwinStartIdx;
+            expData(currStructEntry).subwindowSize = subwindowSize;
 
             cd(scriptPath)
-            powerRatios = calcPowerRatios(expData(currStructEntry),scriptPath,currExpPath);
+            powerRatios(1,:) = calcPowerRatios(expData(currStructEntry),scriptPath,currExpPath);
             
             expData(currStructEntry).powerRatios = powerRatios;
             

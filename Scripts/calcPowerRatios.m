@@ -62,10 +62,9 @@ fclose('all');
 % write values to .csv
 dlmwrite(filename,powerRatios,'precision',10,'-append','coffset',0);
 
-% for-loop to color-code each band
+% plot power ratios
 figure
-
-for l = 1:numBands
+for l = 1:numBands % color-codes each band
     bar(l,powerRatios(l))
     hold on
 end
@@ -79,9 +78,4 @@ xlim([0 numBands+1])
 
 
 fclose('all');
-% % why am I saving to expData.mat? won't it overwrite what I calculated in
-% % extractWindows.m?: you don't - you also save the powerratio values
-% savefile = 'expData.mat';
-% save(savefile,'expData','Fs','startDate')
-% fprintf('Saved experiment data to %s\n',savefile)
 return
