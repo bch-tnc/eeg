@@ -116,7 +116,7 @@ for i = 1:numMice % step through all entries of mouseID
             % - figure out how to save new startDate later
             trace_window = trace(sampleStart:sampleEnd,2);
             savefile = sprintf('%d_Traces_W%d.mat',currMouse,currWindow);
-            save(savefile,'trace_window','Fs','startDate')
+            save(savefile,'trace_window','Fs','startDate');
             fprintf('Saved to %s\n',savefile);
             
             % subwindows-related variables
@@ -172,7 +172,7 @@ end
 
 % save experiment data
 savefile = sprintf('expData.mat');
-save(savefile,'expData','Fs','startDate')
+save(savefile,'expData','Fs','startDate','-v7.3') % v7.3 for files > 2GB
 fprintf('Saved experiment data to %s\n',savefile)
 
 %% Return to Sender
