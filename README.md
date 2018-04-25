@@ -1,16 +1,15 @@
 EEG Analysis Tools
 - a project by Kenny Yau
-- last updated: 18-Apr-2018
+- last updated: 25-Apr-2018
 
 Current Project Objectives:
-- save .mat files in the root directory
-- polish the features we currently have, e.g.
-	- calculate power band values for each subwindow
-	- use a periodogram instead of an fft in the power band value calculations
-	- averaging power band values by drug treatment type, genotype, etc
+- calculate power band values for each subwindow
 - combine extractWindows.m and outputPower.m so that we don't have to save each subwindow
+- averaging power band values by drug treatment type, genotype, etc (don't recalculate power ratios)
+- use a periodogram instead of an fft in the power band value calculations
 
 Future Project Objectives
+- have DSI_Load.m run for multiple folders
 - add analyses tools
 - automate the data conversion process
 - add treatment type as a parameter
@@ -52,6 +51,7 @@ After all of this, the result should be:
 	- a vector of power band averages for the windows you specify gets printed out
 
 At this moment, running DSI_Load.m, extractWindows.m, and outputPower.m works pretty smoothly.
+DSI_Load.m saves traces 2 directories above text files (on the same level where subexperiment folders are)
 Power values are calculated correctly
 calcGroupAvg.m works too, but it only checks for window type and genotype, not treatment. 
 Subwindows are currently not saved in a nice struct; each subwindow gets saved in its own .mat file.
