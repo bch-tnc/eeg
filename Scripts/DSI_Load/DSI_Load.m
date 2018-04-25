@@ -609,9 +609,10 @@ end
 
 savestring = strcat(mouse{n}, '_Traces_Full.mat');
 
-%save .mat files 1 directory up from text files for easier location
+%save .mat files 2 directory up from text files for easier location
 
 currPath=pwd;
+cd('..')
 cd('..')
 
 % Saving data, status messages
