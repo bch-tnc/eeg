@@ -1,4 +1,4 @@
-function powerRatios = calcPowerRatios(traceStruct,scriptPath,expPath,graphIdx)
+function powerRatios = calcPowerRatios(traceStruct,scriptPath,expPath)
 % function powerRatios = calcPowerRatios(traceStruct)
 % calculates the power ratios for the window of EEG data contained in
 % traceStruct

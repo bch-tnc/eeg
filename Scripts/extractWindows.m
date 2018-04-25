@@ -66,8 +66,6 @@ isData2Save = false;
 expData = struct;
 currStructEntry = 1;
 
-graphIdx = 0; % index for figures
-
 % read in .mat file, perform operations
 for i = 1:numMice % step through all entries of mouseID
     currMouse = mouseID(i);
@@ -82,8 +80,6 @@ for i = 1:numMice % step through all entries of mouseID
             break % stop cycling through the filenames once we've found the file
         end
     end
-    
-    graphIdx = graphIdx + 1;
     
     % do window extraction here
     % Excel stores times as normalized fractions of the day
@@ -158,7 +154,7 @@ for i = 1:numMice % step through all entries of mouseID
             expData(currStructEntry).Fs = Fs;
 
             cd(scriptPath)
-            powerRatios = calcPowerRatios(expData(currStructEntry),scriptPath,currExpPath,graphIdx);
+            powerRatios = calcPowerRatios(expData(currStructEntry),scriptPath,currExpPath);
             
             expData(currStructEntry).powerRatios = powerRatios;
             

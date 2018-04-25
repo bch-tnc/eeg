@@ -4,8 +4,9 @@ EEG Analysis Tools
 
 Current Project Objectives:
 - calculate power band values for each subwindow
-- combine extractWindows.m and outputPower.m so that we don't have to save each subwindow
+- save subwindow power band values in a matrix along with full-window power band values
 - averaging power band values by drug treatment type, genotype, etc (don't recalculate power ratios)
+- add an isPlotted boolean to control graph output
 - use a periodogram instead of an fft in the power band value calculations
 
 Future Project Objectives
@@ -54,5 +55,6 @@ At this moment, running DSI_Load.m, extractWindows.m, and outputPower.m works pr
 DSI_Load.m saves traces 2 directories above text files (on the same level where subexperiment folders are)
 Power values are calculated correctly
 calcGroupAvg.m works too, but it only checks for window type and genotype, not treatment. 
-Subwindows are currently not saved in a nice struct; each subwindow gets saved in its own .mat file.
-Power values are saved within the expData struct.
+Subwindows are no longer saved; only the parent trace is saved
+Power values are saved within the expData struct under the powerRatios field
+The first row of the powerRatios field is power band values for the parent window; subsequent rows are that of subwindows
