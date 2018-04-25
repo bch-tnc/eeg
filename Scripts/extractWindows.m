@@ -66,6 +66,8 @@ isData2Save = false;
 expData = struct;
 currStructEntry = 1;
 
+graphIdx = 0; % index for figures
+
 % read in .mat file, perform operations
 for i = 1:numMice % step through all entries of mouseID
     currMouse = mouseID(i);
@@ -80,6 +82,8 @@ for i = 1:numMice % step through all entries of mouseID
             break % stop cycling through the filenames once we've found the file
         end
     end
+    
+    graphIdx = graphIdx + 1;
     
     % do window extraction here
     % Excel stores times as normalized fractions of the day
@@ -151,7 +155,13 @@ for i = 1:numMice % step through all entries of mouseID
             expData(currStructEntry).winNum = currWindow;
             expData(currStructEntry).trace = trace_window;
             expData(currStructEntry).genotype = currGenotype;
+            expData(currStructEntry).Fs = Fs;
 
+            cd(scriptPath)
+            powerRatios = calcPowerRatios(expData(currStructEntry),scriptPath,currExpPath,graphIdx);
+            
+            expData(currStructEntry).powerRatios = powerRatios;
+            
             % move to next item in WOI
             currEntry = currEntry + 1;
             currStructEntry = currStructEntry + 1;
