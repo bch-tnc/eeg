@@ -1,6 +1,6 @@
 # EEG Analysis Tools
-*a project by Kenny Yau
-*last updated: 09-May-2018
+- a project by Kenny Yau
+- last updated: 09-May-2018
 
 ## Urgent Project Objectives:
 - format the way savePowerRatio saves the power values
