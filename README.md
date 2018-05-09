@@ -3,10 +3,9 @@ EEG Analysis Tools
 - last updated: 25-Apr-2018
 
 Urgent Project Objectives:
-- confirm savePowerRatios saves the power band values just as well as calcPowerRatios does
+- format the way savePowerRatio saves the power values
 - add column for subwindow number
 - averaging power band values by drug treatment type, genotype, etc (don't recalculate power ratios)
-- add an isPlotted boolean to control graph output
 - watch program's memory usage doesn't crash the system (currently can use ~13GB for 4 mice's worth of data)
 
 Lower Priority Objectives:
@@ -50,3 +49,4 @@ Subwindows are no longer saved; only the parent trace is saved
 Power values are saved within the expData struct under the powerRatios field
 Subwindow power band values are also calculated
 The first row of the powerRatios field is power band values for the parent window; subsequent rows are that of subwindows
+calcPowerRatios no longer saves power values; that functionality is left to savePowerRatios
