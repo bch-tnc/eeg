@@ -1,19 +1,19 @@
 # EEG Analysis Tools
-## a project by Kenny Yau
-## last updated: 09-May-2018
+a project by Kenny Yau
+last updated: 09-May-2018
 
 ## Urgent Project Objectives:
 - format the way savePowerRatio saves the power values
 - saving averaged power band values
 - watch program's memory usage doesn't crash the system (currently can use ~13GB for 4 mice's worth of data)
 
-## Medium Priority Objectives:
+### Medium Priority Objectives:
 - use a periodogram instead of an fft in the power band value calculations (around line 40 in calcPowerRatios)
 
-## Lower Priority Objectives:
+### Lower Priority Objectives:
 - add column for subwindow number
 
-## Future Project Objectives
+### Future Project Objectives
 - have calcGroupAvg.m read in a list of window/genotype combinations to average
 - have DSI_Load.m run for multiple folders
 - add analyses tools
