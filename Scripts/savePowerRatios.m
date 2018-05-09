@@ -29,9 +29,10 @@ fprintf(fid, '%s\n', header{1,end}) ;
 fclose('all');
 
 % write label
-winText = {sprintf('%d',currMouse),sprintf('%d',currWin),sprintf('%d',currGenotype)};
 fid = fopen(filename,'a');
 if fid == -1, error('Cannot open file'); end
+
+winText = {sprintf('%d',currMouse),sprintf('%d',currWin),sprintf('%d',currGenotype)};
 
 fprintf(fid, '%s,', winText{1});
 fprintf(fid, '%s,', winText{2});
