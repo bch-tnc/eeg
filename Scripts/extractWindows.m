@@ -62,7 +62,7 @@ varFiles = dir('*Full*.mat'); % gets info about all .mat files with full EEG rec
 numVarFiles = size(varFiles,1);
 
 isData2Save = false;
-isPlotted = false;
+isPlotted = true;
 
 % create a struct
 expData = struct;
@@ -177,7 +177,7 @@ for i = 1:numMice % step through all entries of mouseID
             expData(currStructEntry).subwindowSize = subwindowSize;
 
             cd(scriptPath)
-            powerRatios(1,:) = calcPowerRatios(expData(currStructEntry),scriptPath,currExpPath,isPlotted);
+            powerRatios(1,:) = calcPowerRatios(expData(currStructEntry),scriptPath,currExpPath,isPlotted)
             
             expData(currStructEntry).powerRatios = powerRatios;
             
