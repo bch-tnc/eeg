@@ -7,14 +7,18 @@ scriptPath = pwd;
 
 % later, make the script automatically cycle through all experiments
 % for now, the script runs on a specific folder
+currExpPath = uigetdir('../');
 cd(currExpPath)
 load('expData.mat')
 
 genotype = input('What genotype to average? (Enter a number): ');
 window   = input('What window to average? (Enter a number): ');
 
-numBands = length(expData(1).powerRatios);
-powerSum = zeros(1,numBands);
+holder = size(expData(1).powerRatios);
+
+numSubwindows = holder(1);
+numBands = holder(2);
+powerSum = zeros(numSubwindows,numBands);
 numWin   = 0;
 for k = 1:length(expData)
     currWin = expData(k).winNum;
