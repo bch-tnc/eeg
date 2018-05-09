@@ -14,7 +14,7 @@ bandDef = [0.5  4     % delta
            4   13     % BT
            8   13     % alpha
           13   30     % beta
-          30   80]    % gamma
+          30   80];   % gamma
       
     dims = size(bandDef);      
 numBands = dims(1);
@@ -155,9 +155,6 @@ for i = 1:numMice % step through all entries of mouseID
             % save subwindows
             for k = 1:numSubWindows
                 subwindow = trace_window(subwindowStart:subwindowEnd);
-%                 savefile = sprintf('%d_Traces_W%d-%d.mat',currMouse,currWindow,k);
-%                 save(savefile,'subwindow','Fs','startDate')
-%                 fprintf('Saved sub-window to %s\n',savefile);
 
                 % create subwindow struct
                 subwinData = struct;
@@ -168,6 +165,7 @@ for i = 1:numMice % step through all entries of mouseID
                 subwinData.Fs = Fs;
                 
                 cd(scriptPath)
+                fprintf('Calculating Mouse %d Window Type %d Subwin %d\n',currMouse,currWin,k)
                 powerRatios(k+1,:) = calcPowerRatios(subwinData,scriptPath,currExpPath,isPlotted,bandDef,bandNames);
                 
                 if isPlotted
@@ -190,6 +188,7 @@ for i = 1:numMice % step through all entries of mouseID
             expData(currStructEntry).subwindowSize = subwindowSize;
 
             cd(scriptPath)
+            fprintf('Calculating Mouse %d Window Type %d Full\n',currMouse,currWin)
             powerRatios(1,:) = calcPowerRatios(expData(currStructEntry),scriptPath,currExpPath,isPlotted,bandDef,bandNames);
             
             expData(currStructEntry).powerRatios = powerRatios;
@@ -204,8 +203,6 @@ for i = 1:numMice % step through all entries of mouseID
             if currEntry <= numEntries
                 currEntryName = WOI(currEntry,1);
             end
-%             text = sprintf('currEntry: %d | currStructEntry: %d | currEntryName: %d',currEntry,currStructEntry,currEntryName);
-%             disp(text)
             
             if currEntryName ~= currMouse || currEntry > numEntries
                 break;

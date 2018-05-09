@@ -40,7 +40,7 @@ cd(expPath)
 currMouse    = traceStruct.mouse;
 currWin      = traceStruct.winNum;
 currGenotype = traceStruct.genotype;
-fprintf('Calculating Mouse %d Window %d\n',currMouse,currWin)
+%fprintf('Calculating Mouse %d Window %d\n',currMouse,currWin)
 currTrace = traceStruct.trace;
 currTrace(isnan(currTrace)) = 0; % make NaN and Inf values 0 so that
 currTrace(isinf(currTrace)) = 0; % you get valid FFT

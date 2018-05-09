@@ -39,8 +39,8 @@ for i = 1:numBands
     bandFFT = FFT(find(f>=lowBound & f<upBound));
        fFFT = f(find(f>=lowBound & f<upBound));
 
+    % plot the different bands
     if isPlotted
-        % plot the different bands
         plot(fFFT,bandFFT)
         hold on
     end
