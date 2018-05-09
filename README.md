@@ -46,3 +46,4 @@
 - calcPowerRatios no longer saves power values; that functionality is left to savePowerRatios
 - Changed "window number" to "window type" for clarity between window type and subwindow number
 - Prints status messages outside of functions
+- Power ratio values are nicely formatted now
