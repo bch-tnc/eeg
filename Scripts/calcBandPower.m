@@ -1,18 +1,21 @@
-function [bandPowers,totalPower] = calcBandPower(FFT,f,bandDef,bandNames)
+function [bandPowers,totalPower] = calcBandPower(FFT,f,isPlotted,bandDef,bandNames)
 % function bandPower = calcBandPower(FFT,f,bandDef)
 % Oscillation band power calculation
 
 %% Power Bands Plot
 % default band definition
-if nargin < 4
+if nargin < 5
     bandNames = {'Delta','Theta','Alpha','Beta','Gamma'};
 end
-if nargin < 3    
+if nargin < 4    
     bandDef = [0.5  4     % delta
                4    8     % theta
                8   13     % alpha
               13   30     % beta
               30   80];   % gamma
+end
+if nargin < 3
+    isPlotted = false;
 end
     
 dim = size(bandDef);
@@ -22,7 +25,9 @@ meanPowers = zeros(1,numBands);
 
 df = f(2)-f(1); % frequency step
 
-figure
+if isPlotted
+    figure
+end
 
 for i = 1:numBands
     currBand = bandDef(i,:);
@@ -34,9 +39,11 @@ for i = 1:numBands
     bandFFT = FFT(find(f>=lowBound & f<upBound));
        fFFT = f(find(f>=lowBound & f<upBound));
 
-    % plot the different bands
-    plot(fFFT,bandFFT)
-    hold on
+    if isPlotted
+        % plot the different bands
+        plot(fFFT,bandFFT)
+        hold on
+    end
     
     % calculates absolute band powers and mean powers
     % meanPowers(i) = mean(bandFFT);

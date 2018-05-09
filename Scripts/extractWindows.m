@@ -12,6 +12,7 @@ MIN_PER_HOUR = 60;
 %% Metadata Collection
 scriptPath = pwd;
 scriptName = mfilename; % gets name of the script
+addpath(scriptPath) % temporarily adds the script directory to the path
 
 %% Extracting the Signal Windows
 % reads in an .xlsx file that contains the desired windows for each mouse
@@ -54,13 +55,14 @@ numMice = length(mouseID);
 %% Cycle Through .mat Files
 
 % get directory name of the folder containing our stitched .mat data files
-currExpPath = uigetdir;
+currExpPath = uigetdir('../'); % start a directory up
 cd(currExpPath)
 
 varFiles = dir('*Full*.mat'); % gets info about all .mat files with full EEG recordings in the current folder
 numVarFiles = size(varFiles,1);
 
 isData2Save = false;
+isPlotted = false;
 
 % create a struct
 expData = struct;
@@ -126,12 +128,14 @@ for i = 1:numMice % step through all entries of mouseID
             subwindowEnd = subwindowStart+subwindowSize;  
             
             % visualize subwindows
-            figure
-            plot(trace_window)
-            text = sprintf('Animal %d, Window %d',currMouse,currWindow);
-            title(text)
-            hold on
-            
+            if isPlotted    
+                figure
+                plot(trace_window)
+                text = sprintf('Animal %d, Window %d',currMouse,currWindow);
+                title(text)
+                hold on
+            end
+                
             subwinStartIdx = zeros(1,numSubWindows);
             powerRatios = zeros(numSubWindows+1,5);
             
@@ -151,10 +155,12 @@ for i = 1:numMice % step through all entries of mouseID
                 subwinData.Fs = Fs;
                 
                 cd(scriptPath)
-                powerRatios(k+1,:) = calcPowerRatios(subwinData,scriptPath,currExpPath)
+                powerRatios(k+1,:) = calcPowerRatios(subwinData,scriptPath,currExpPath,isPlotted)
                 
-                plot(subwindowStart:subwindowEnd,subwindow)
-                hold on
+                if isPlotted
+                    plot(subwindowStart:subwindowEnd,subwindow)
+                    hold on
+                end
                 
                 subwinStartIdx(k) = subwindowStart;
                 subwindowStart = subwindowStart + subwindowSize;
@@ -171,7 +177,7 @@ for i = 1:numMice % step through all entries of mouseID
             expData(currStructEntry).subwindowSize = subwindowSize;
 
             cd(scriptPath)
-            powerRatios(1,:) = calcPowerRatios(expData(currStructEntry),scriptPath,currExpPath);
+            powerRatios(1,:) = calcPowerRatios(expData(currStructEntry),scriptPath,currExpPath,isPlotted);
             
             expData(currStructEntry).powerRatios = powerRatios;
             
@@ -203,4 +209,5 @@ save(savefile,'expData','Fs','startDate','-v7.3') % v7.3 for files > 2GB
 fprintf('Saved experiment data to %s\n',savefile)
 
 %% Return to Sender
+rmpath(scriptPath)
 cd(scriptPath)
