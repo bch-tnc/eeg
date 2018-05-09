@@ -1,16 +1,16 @@
 EEG Analysis Tools
 - a project by Kenny Yau
-- last updated: 25-Apr-2018
+- last updated: 09-May-2018
 
 Urgent Project Objectives:
 - format the way savePowerRatio saves the power values
 - add column for subwindow number
-- averaging power band values by drug treatment type, genotype, etc (don't recalculate power ratios)
+- saving averaged power band values
 - watch program's memory usage doesn't crash the system (currently can use ~13GB for 4 mice's worth of data)
 
 Lower Priority Objectives:
 - consider changing window number to window type 
-- use a periodogram instead of an fft in the power band value calculations
+- use a periodogram instead of an fft in the power band value calculations (around line 40 in calcPowerRatios)
 
 Future Project Objectives
 - have DSI_Load.m run for multiple folders
@@ -25,7 +25,6 @@ Current Dataflow Design:
 - record eeg data
 - run DSI_Load.m
 - run extractWindows.m
-- run outputPower.m
 
 What This Does:
 - defines window types in winDefs.xlsx

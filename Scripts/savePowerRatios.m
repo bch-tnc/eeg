@@ -1,4 +1,4 @@
-function savePowerRatios(traceStruct,expPath,filename)
+function savePowerRatios(traceStruct,expPath,header,filename)
 % function savePowerRatios(powerRatios,savefile)
 % Saves powerRatio data to an Excel file
 
@@ -9,10 +9,12 @@ currWin   = traceStruct.winNum;
 currGenotype = traceStruct.genotype;
 powerRatios = traceStruct.powerRatios;
 
-if nargin < 3
+if nargin < 4
     filename = 'powerData.csv';
 end
-header = {'Mouse','Window','Genotype','Delta','Theta','Alpha','Beta','Gamma'};
+if nargin < 3
+    header = {'Mouse','Window','Genotype','Delta','Theta','Alpha','Beta','Gamma'};
+end
 
 % if listing.name == filename
 fid = fopen(filename,'a');

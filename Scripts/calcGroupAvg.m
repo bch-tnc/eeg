@@ -11,8 +11,8 @@ currExpPath = uigetdir('../');
 cd(currExpPath)
 load('expData.mat')
 
-genotype = input('What genotype to average? (Enter a number): ');
 window   = input('What window to average? (Enter a number): ');
+genotype = input('What genotype to average? (Enter a number): ');
 
 holder = size(expData(1).powerRatios);
 

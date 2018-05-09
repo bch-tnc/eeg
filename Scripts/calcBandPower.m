@@ -6,6 +6,7 @@ function [bandPowers,totalPower] = calcBandPower(FFT,f,isPlotted,bandDef,bandNam
 % default band definition
 if nargin < 5
     bandNames = {'Delta','Theta','Alpha','Beta','Gamma'};
+    header = {'Mouse','Window','Genotype','Delta','Theta','Alpha','Beta','Gamma'};
 end
 if nargin < 4    
     bandDef = [0.5  4     % delta
@@ -21,7 +22,6 @@ end
 dim = size(bandDef);
 numBands = dim(1);
 bandPowers = zeros(1,numBands);
-meanPowers = zeros(1,numBands);
 
 df = f(2)-f(1); % frequency step
 
@@ -45,12 +45,11 @@ for i = 1:numBands
         hold on
     end
     
-    % calculates absolute band powers and mean powers
-    % meanPowers(i) = mean(bandFFT);
+    % calculates absolute band powers
     bandPowers(i) = sum(bandFFT)*df; 
 end
 
-% find total avg power over the entire 0.5-80Hz range
+% find total avg power over the entire bandDef range
 lowBound = bandDef(1,1); upBound = bandDef(dim(1),dim(2));
 bandFFT       = FFT(find(f>=lowBound & f<upBound));
 fFFT          = f(find(f>=lowBound & f<upBound));

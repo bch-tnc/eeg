@@ -9,6 +9,19 @@ SEC_PER_DAY = 86400;
 SEC_PER_MIN = 60;
 MIN_PER_HOUR = 60;
 
+bandDef = [0.5  4     % delta
+           4    8     % theta
+           4   13     % BT
+           8   13     % alpha
+          13   30     % beta
+          30   80]    % gamma
+      
+    dims = size(bandDef);      
+numBands = dims(1);
+
+bandNames = {'Delta','Theta','BT','Alpha','Beta','Gamma'};
+   header = {'Mouse','Window','Genotype','Delta','Theta','BT','Alpha','Beta','Gamma'};
+
 %% Metadata Collection
 scriptPath = pwd;
 scriptName = mfilename; % gets name of the script
@@ -62,7 +75,7 @@ varFiles = dir('*Full*.mat'); % gets info about all .mat files with full EEG rec
 numVarFiles = size(varFiles,1);
 
 isData2Save = false;
-isPlotted = true;
+isPlotted = false; % plots eeg signal, fft, and power ratio values
 
 % create a struct
 expData = struct;
@@ -137,7 +150,7 @@ for i = 1:numMice % step through all entries of mouseID
             end
                 
             subwinStartIdx = zeros(1,numSubWindows);
-            powerRatios = zeros(numSubWindows+1,5);
+            powerRatios = zeros(numSubWindows+1,numBands);
             
             % save subwindows
             for k = 1:numSubWindows
@@ -155,7 +168,7 @@ for i = 1:numMice % step through all entries of mouseID
                 subwinData.Fs = Fs;
                 
                 cd(scriptPath)
-                powerRatios(k+1,:) = calcPowerRatios(subwinData,scriptPath,currExpPath,isPlotted)
+                powerRatios(k+1,:) = calcPowerRatios(subwinData,scriptPath,currExpPath,isPlotted,bandDef,bandNames);
                 
                 if isPlotted
                     plot(subwindowStart:subwindowEnd,subwindow)
@@ -177,13 +190,13 @@ for i = 1:numMice % step through all entries of mouseID
             expData(currStructEntry).subwindowSize = subwindowSize;
 
             cd(scriptPath)
-            powerRatios(1,:) = calcPowerRatios(expData(currStructEntry),scriptPath,currExpPath,isPlotted)
+            powerRatios(1,:) = calcPowerRatios(expData(currStructEntry),scriptPath,currExpPath,isPlotted,bandDef,bandNames);
             
             expData(currStructEntry).powerRatios = powerRatios;
             
             % save power ratios
             cd(scriptPath)
-            savePowerRatios(expData(currStructEntry),currExpPath)
+            savePowerRatios(expData(currStructEntry),currExpPath,header)
             
             % move to next item in WOI
             currEntry = currEntry + 1;

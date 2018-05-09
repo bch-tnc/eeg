@@ -1,22 +1,27 @@
-function powerRatios = calcPowerRatios(traceStruct,scriptPath,expPath,isPlotted)
+function powerRatios = calcPowerRatios(traceStruct,scriptPath,expPath,isPlotted,bandDef,bandNames)
 % function powerRatios = calcPowerRatios(traceStruct)
 % calculates the power ratios for the window of EEG data contained in
 % traceStruct
 
+% default settings
+if nargin < 6
+    bandNames = {'Delta','Theta','Alpha','Beta','Gamma'};
+    header = {'Mouse','Window','Genotype','Delta','Theta','Alpha','Beta','Gamma'};
+
+end
+if nargin < 5
+    bandDef = [0.5  4     % delta
+               4    8     % theta
+               8   13     % alpha
+              13   30     % beta
+              30   80];   % gamma
+end
 if nargin < 4
     isPlotted = 0; % don't plot by default
 end
 
-bandDef = [0.5  4     % delta
-           4    8     % theta
-           8   13     % alpha
-          13   30     % beta
-          30   80];   % gamma
-bandNames = {'Delta','Theta','Alpha','Beta','Gamma'};
 numBands = size(bandDef,1);
-
 filename = 'powerData.csv';
-header = {'Mouse','Window','Genotype','Delta','Theta','Alpha','Beta','Gamma'};
 
 cd(expPath)
 
@@ -48,7 +53,7 @@ FFT = abs(fftshift(fft(currTrace,N)));
 
 % calculate power band values
 cd(scriptPath)
-[bandPowers,totalPower] = calcBandPower(FFT,f,isPlotted);
+[bandPowers,totalPower] = calcBandPower(FFT,f,isPlotted,bandDef);
 cd(expPath)
 
 powerRatios = bandPowers/totalPower;
